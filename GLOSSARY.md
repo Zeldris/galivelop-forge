@@ -29,6 +29,9 @@ mantiene al día (skill `domain-modeling`). El flujo nunca sobrescribe este arch
 
 <!-- **Término**: definición, y dónde vive en el código. -->
 
+- **Puerto no disponible**: la forma por defecto de cada puerto (`Unavailable<Puerto>`); toda operación lanza
+  `PortUnavailable` con el puerto, lo que falta y la orden o el repo que lo arregla (invariante 10). `gforge/ports.py`.
+
 Tomado de `docs/ddd.md` §2 (F-1 cerrada). Aún no hay código.
 
 - **Fuente** (`Source`): adaptador que lee los datos crudos de una aplicación.

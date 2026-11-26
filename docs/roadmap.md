@@ -25,7 +25,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 
 ## 0.1.0: datos (F1)
 
-- 0.1.0-1 Paquete `gforge` (stdlib), puertos vacíos que fallan cerrados (invariante 10) y test de importación limpia (invariante 7).
+- 0.1.0-1 Paquete `gforge` (stdlib), puertos vacíos que fallan cerrados (invariante 10) y test de importación limpia (invariante 7). `hecho`
 - 0.1.0-2 Vendorizar gart con su test de huella sha256; alta del espacio `gforge` en gart.
 - 0.1.0-3 Esquema `gforge.dataset/0` y su validación.
 - 0.1.0-4 Fuente Tarkor: leer los exports de destilación y DPO (sin ejecutar los scripts del juego).
