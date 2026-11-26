@@ -24,7 +24,7 @@ F0: el DDD con las decisiones de §8 cerradas y el reparto en versiones; espera 
 
 ## Pendiente
 
-Lo pendiente está en el archivo de `pendingFile` (`.claude/gw.json`; por defecto `docs/records/pending.md`): decisiones de la persona que bloquean algo, problemas conocidos, ideas sin planificar. Se añade y se quita allí; `handoff.py move-pending` rehace esta línea y `handoff.py add-pending "texto"` añade sin leer el archivo.
+Lo pendiente está en [`docs/records/pending.md`](records/pending.md); se añade y se quita allí.
 
 ## Comprobar el estado
 
