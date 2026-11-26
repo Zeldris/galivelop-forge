@@ -13,3 +13,5 @@ venv/
 # galivelop-workflow:gitignore end
 # galivelop-workflow: private, never committed
 .claude/gw.local.json
+.claude/settings.local.json
+.claude/worktrees/

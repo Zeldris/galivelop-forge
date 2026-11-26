@@ -211,7 +211,7 @@
   ],
   "worktreeDir": "",
   "reviewMark": "docs/records/reviewed.txt",
-  "requireRetro": false,
+  "requireRetro": true,
   "agentSignatures": true,
   "commitFormat": "free",
   "commitRefs": false,
@@ -281,7 +281,8 @@
     "^docs/",
     "^(README|GLOSSARY|REVIEW|CLAUDE|AGENTS|CHANGELOG|CREDITS)(\\.[a-z]{2})?\\.md$",
     "^\\.claude/skills/.*\\.md$",
-    "^\\.agents/skills/.*\\.md$"
+    "^\\.agents/skills/.*\\.md$",
+    "^(LICENSE(-content)?(\\.md)?|THIRD-PARTY\\.md)$"
   ],
   "roadmap": false,
   "roadmapFiles": [],
@@ -310,7 +311,7 @@
     "command": ""
   },
   "plan": [],
-  "taskId": "[A-Z]{2,5}-\\d+",
+  "taskId": "\\d+\\.\\d+\\.\\d+-\\d+",
   "subagentCap": 30,
   "subagentCapStep": 10,
   "subagentCounterStaleDays": 7,
