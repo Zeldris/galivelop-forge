@@ -145,4 +145,6 @@ planea, decide y revisa. Esta línea es la autorización que piden las instrucci
 
 - Instalar: —. Núcleo `gforge` solo con la stdlib de Python 3.8+ (llega en F1); los entrenadores, extras opcionales que
   fallan con la orden que los instala. Diseño: `docs/ddd.md`.
-- Ni datos NC de Tarkor ni datos personales en el repo (solo manifiestos); nada sale a Hugging Face sin confirmación.
+- Ningún dato personal en el repo; los datasets van en `datasets/` con la licencia de contenido (CC BY-NC-SA 4.0, ADR
+  0002) y sin ejemplos de maestros cerrados (ADR 0007). A Hugging Face solo publica `publish`, con la medida del GVE
+  en verde (ADR 0004); nada más sale sin confirmación.

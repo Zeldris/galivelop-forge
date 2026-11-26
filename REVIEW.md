@@ -117,4 +117,7 @@ creada.
 
 - Las invariantes de `docs/ddd.md` §5 tienen su test; un cambio que toca una sin test no pasa.
 - Ningún import fuera de la biblioteca estándar en el núcleo `gforge`.
-- Ningún dato crudo de Tarkor (CC BY-NC-SA) ni dato personal en el repo.
+- Ningún dato personal en el repo; un dataset fuera de `datasets/` o sin licencia CC BY-NC-SA 4.0 no pasa (ADR 0002).
+- Ningún ejemplo sin maestro o con un maestro cerrado (ADR 0007).
+- Ninguna subida a Hugging Face fuera de `publish` ni sin la invariante 4 (ADR 0004).
+- Los puertos fallan cerrados: nunca se finge una medida ni un cerrojo de grun (ADR 0013).

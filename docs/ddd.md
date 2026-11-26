@@ -190,7 +190,7 @@ _(ninguna: todas cerradas en la F-1, ver la tabla de abajo. Lo que queda provisi
 ## Pendiente para F0
 
 - ~~Llevar q1-q13 a `docs/adr/NNNN-<slug>.md` (formato del flujo: `.claude/skills/domain-modeling/ADR-FORMAT.md`).~~ — hecho: docs/adr/0001-0013
-- Poner al día `AGENTS.md`, `REVIEW.md` y `GLOSSARY.md` con q2 (datos NC en el repo) y q4 (publicación automática).
-- Repartir F1-F6 en versiones (`0.1.0`…), con tareas con id y estado, al estilo del roadmap del GVE.
+- ~~Poner al día `AGENTS.md`, `REVIEW.md` y `GLOSSARY.md` con q2 (datos NC en el repo) y q4 (publicación automática).~~ — hecho.
+- ~~Repartir F1-F6 en versiones (`0.1.0`…), con tareas con id y estado, al estilo del roadmap del GVE.~~ — hecho: `docs/roadmap.md`.
 - Avisar a gart (alta del espacio `gforge`), a gmod/grun (lo que forge espera de sus puertos) y al GVE (que forge
   consumirá `gve.evidence/1` y `gve.comparison/1` del narrador).
