@@ -6,7 +6,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 
 | Versión | Hito | Pasa si | Depende de | Estado |
 |---|---|---|---|---|
-| 0.0.1 | F-1 + F0 | DDD borrador 2, ADR 0001-0013, reglas y roadmap en `main`. | — | en curso |
+| 0.0.1 | F-1 + F0 | DDD borrador 2, ADR 0001-0013, reglas y roadmap en `main`. | — | hecho |
 | 0.1.0 | F1 Datos | Un export real de Tarkor entra como `gforge.dataset/0` válido en gart, con las invariantes 1, 2, 3, 7, 9 y 10 con su test. | gart (alta de `gforge`) | pendiente |
 | 0.2.0 | F2 Línea base | Hay una `gve.evidence/1` válida del narrador para el modelo actual y para el candidato pequeño. | GVE 0.3, gmod | bloqueado (GVE 0.3, gmod) |
 | 0.3.0 | F3 Peldaño 1 | Prompt y Modelfile del narrador tienen su `gve.comparison/1` y `next_rung` decide con ella. | 0.2.0, grun | bloqueado (0.2.0, grun) |
@@ -21,7 +21,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 - 0.0.1-2 ADR 0001-0013. `hecho`
 - 0.0.1-3 `AGENTS.md`, `REVIEW.md` y `GLOSSARY.md` al día con los ADR. `hecho`
 - 0.0.1-4 Este roadmap. `hecho`
-- 0.0.1-5 Revisión del bloque, retro y subida a `main` con la confirmación de la persona. `en curso`
+- 0.0.1-5 Revisión del bloque, retro y subida a `main` con la confirmación de la persona. `hecho`
 
 ## 0.1.0: datos (F1)
 
