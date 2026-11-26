@@ -9,9 +9,9 @@
 | Campo | Valor |
 |---|---|
 | **Rama** | `ccr-9d1db1a5-uvw2uh` |
-| **Fase / tarea** | F-1 cerrada. F0 (0.0.1): ADR 0001-0013, reglas, glosario y `docs/roadmap.md` hechos; falta la tarea 0.0.1-5 (revisión, retro, `main`). |
-| **Último punto estable** | El commit de reglas y roadmap de la F0. |
-| **Siguiente paso** | 0.0.1-5: `/code-review` del bloque contra `origin/main` (commit de arreglos con `Findings:`), `/gw-opt-tokens` y `/retro` presentados a la persona, `reviewed.sh` y subida a `main` con su confirmación. |
+| **Fase / tarea** | Versión 0.0.1 (F-1 + F0) cerrada y en `main` (d31f9f8, 2026-11-26, con confirmación de la persona). Siguiente versión: 0.1.0 (F1, datos). |
+| **Último punto estable** | `main` = d31f9f8 (marca de revisión de 5a343ef). |
+| **Siguiente paso** | `/clear` y abrir la 0.1.0 con `docs/roadmap.md`: empezar por 0.1.0-1 (paquete `gforge` stdlib, puertos que fallan cerrados, test de importación limpia). Pendientes en `docs/records/pending.md`. |
 | **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (solo `tests/test_smoke.py`: deuda hasta que exista `gforge` en F1). |
 
 ## Para la próxima publicación
