@@ -1,6 +1,7 @@
 # Retro 2026-11-26: instalación, F-1 y F0 (versión 0.0.1)
 
-**Estado:** pendiente de la persona.
+**Estado:** aprobada y aplicada (T3 en `.claude/gw/gw-opt-tokens.md`; T2, R1, R2 y R3 llevadas al flujo en su
+sección); T1 rechazada (en Claude en la nube no se pueden desactivar los conectores); R4 ya aplicada.
 
 Sesión `a54c4183`: instalación del flujo, DDD borrador 2, ADR 0001-0013, reglas, roadmap y revisión del bloque.
 Gasto medido con `gw-opt-tokens` (`measure.py --hours 0`): sesión principal, 64 llamadas, 7,48 M de entrada, contexto

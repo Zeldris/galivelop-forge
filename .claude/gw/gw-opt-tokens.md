@@ -14,6 +14,9 @@ las crea una vez; desde entonces son del proyecto.
 ## Costes conocidos
 
 <!-- Lo que se ha visto que cuesta mucho en este proyecto (archivos grandes leídos enteros, salidas largas...). -->
+- El arranque fijo (prompt, herramientas, MCP) es ~95 k por llamada, el 81 % de la entrada; en Claude en la nube los
+  conectores no se pueden desactivar (T1 rechazada): solo baja con menos llamadas.
+- `AGENTS.md` se leyó 12 veces en una sesión: se lee una vez por tarea; para una regla puntual, `grep -n` (T3).
 
 ## Ajustes en vigor
 
@@ -22,3 +25,5 @@ las crea una vez; desde entonces son del proyecto.
 ## Referencias medidas
 
 <!-- Cifras medidas con las que comparar: fecha, sesión, contexto medio, llamadas, total. -->
+- 2026-11-26, sesión a54c4183 (instalación, F-1, F0): 64 llamadas, contexto medio 117 k, 7,48 M de entrada; con
+  los subagentes, 10,08 M.
