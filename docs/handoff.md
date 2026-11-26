@@ -9,9 +9,9 @@
 | Campo | Valor |
 |---|---|
 | **Rama** | `ccr-9d1db1a5-uvw2uh` |
-| **Fase / tarea** | Instalación de Galivelop-workflow v0.9.1 hecha; F-1 (mejorar, ampliar y cerciorar `docs/ddd.md`) pendiente; luego F0 (decisiones a `main`, reparto en versiones). |
-| **Último punto estable** | El commit de instalación del flujo (workflow v0.9.1, licencias, DDD borrador 1). |
-| **Siguiente paso** | F-1: repasar `docs/ddd.md` sección a sección con la persona (skill `grill-with-docs`), contrastando con los DDD de gart, gmod, grun y GVE mediante subagentes, y cerrar las preguntas de §8. |
+| **Fase / tarea** | F-1: `docs/ddd.md` borrador 2 escrito con las decisiones q1-q13 (tabla «Decisiones de la F-1»); falta que la persona lo dé por cerrado. Luego F0. |
+| **Último punto estable** | El commit del DDD borrador 2. |
+| **Siguiente paso** | Confirmar con la persona el cierre de la F-1; luego F0 según «Pendiente para F0» de `docs/ddd.md` (ADR q1-q13, AGENTS/REVIEW/GLOSSARY con q2 y q4, versiones, `/code-review` del bloque con `Findings:`). |
 | **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (solo `tests/test_smoke.py`: deuda hasta que exista `gforge` en F1). |
 
 ## Para la próxima publicación
