@@ -29,17 +29,20 @@ mantiene al día (skill `domain-modeling`). El flujo nunca sobrescribe este arch
 
 <!-- **Término**: definición, y dónde vive en el código. -->
 
-Borrador tomado de `docs/ddd.md` §2; se cerrará en F-1. Aún no hay código.
+Tomado de `docs/ddd.md` §2 (F-1 cerrada). Aún no hay código.
 
 - **Fuente** (`Source`): adaptador que lee los datos crudos de una aplicación.
 - **Ejemplo** (`Example`): pareja entrada→salida (SFT) o entrada→elegida/rechazada (DPO), con procedencia.
+- **Maestro** (`Teacher`): modelo abierto que generó la salida de un ejemplo y permite entrenar con ella.
 - **Dataset** (`Dataset`): conjunto versionado de ejemplos, con licencia, procedencia, hash y particiones.
 - **Partición** (`Split`): train / val / test, decidida por la semilla y el hash del ejemplo.
-- **Peldaño** (`Rung`): nivel de ajuste: `modelfile`, `lora`, `sft`, `dpo`.
+- **Peldaño** (`Rung`): nivel de ajuste: `prompt`, `modelfile`, `sft`, `dpo`.
 - **Receta** (`Recipe`): peldaño, modelo base, dataset, hiperparámetros y semilla.
-- **Corrida** (`Run`): ejecución de una receta: estado, máquina, duración, pesos.
+- **Entrenamiento** (`TrainingRun`): ejecución de una receta: estado, máquina, duración, pesos. No es la «corrida» del GVE.
+- **Medida** (`Measure`): lo que forge recibe del GVE: una `gve.evidence/1` y, frente a otra, una `gve.comparison/1`.
 - **Línea base** (`Baseline`): medida del GVE del modelo sin ajustar.
-- **Umbral** (`Threshold`): nota mínima del GVE que da por bueno un peldaño.
+- **Umbral** (`Threshold`): mínimo absoluto opcional del objetivo, además de la regla de demostración del GVE.
 - **Escalera** (`Ladder`): secuencia de peldaños de un objetivo, con su medida.
 - **Ficha** (`Card`): model card publicable.
 - **Objetivo** (`Target`): tarea concreta a mejorar (p. ej. `tarkor.narrator`).
+- **Puerto** (`Port`): interfaz de forge hacia otro repo (`MachinePort`, `QueuePort`, `MeasurePort`, `TrainerPort`, `PublishPort`); sin el repo, falla cerrado.
