@@ -1,0 +1,4 @@
+{"agent":"Explore","branch":"ccr-9d1db1a5-uvw2uh","cacheRead":390312,"cacheWrite":37795,"date":"2026-11-26","input":14,"model":"claude-sonnet-5-5","output":4746,"recorded":"2026-11-26T23:02:30Z","refs":[],"session":"a54c4183"}
+{"agent":"main","branch":"ccr-9d1db1a5-uvw2uh","cacheRead":2544770,"cacheWrite":60051,"date":"2026-11-26","input":49,"model":"claude-opus-5-5","output":17496,"recorded":"2026-11-26T23:02:30Z","refs":[],"session":"a54c4183"}
+{"agent":"main","branch":"ccr-9d1db1a5-uvw2uh","cacheRead":373455,"cacheWrite":5203,"date":"2026-11-26","input":8,"model":"claude-opus-5-5","output":430,"recorded":"2026-11-26T23:03:04Z","refs":[],"session":"a54c4183"}
+{"agent":"main","branch":"ccr-9d1db1a5-uvw2uh","cacheRead":127591,"cacheWrite":137,"date":"2026-11-26","input":1,"model":"claude-opus-5-5","output":138,"recorded":"2026-11-26T23:04:13Z","refs":[],"session":"a54c4183"}
