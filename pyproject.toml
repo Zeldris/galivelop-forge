@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "galivelop-forge"
+version = "0.1.0.dev0"
+description = "Galivelop forge: dataset, ladder and training pipeline for small local models."
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+unsloth = ["unsloth"]
+
+[tool.setuptools]
+packages = ["gforge"]
