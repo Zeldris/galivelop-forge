@@ -72,6 +72,34 @@ class BuildTests(Base):
 
         self.assertEqual(datasets._record(One()), {"id": "x"})
 
+    def test_record_slots_with_dict_is_rejected(self):
+        class Loose:
+            __slots__ = ("id", "__dict__")
+
+            def __init__(self):
+                self.id = "x"
+                self.extra = "lost"
+
+        with self.assertRaises(DatasetError) as ctx:
+            datasets._record(Loose())
+        self.assertIn("__dict__", str(ctx.exception))
+        self.assertIn("Loose", str(ctx.exception))
+
+    def test_fsync_failure_after_publish_warns_with_path(self):
+        real = datasets._sync_dir
+
+        def flaky(path):
+            if os.path.exists(os.path.join(self.root, "tarkor.narrator", "0.1.0")):
+                raise OSError("fsync failed")
+            real(path)
+
+        with mock.patch.object(datasets, "_sync_dir", flaky):
+            with self.assertWarns(RuntimeWarning) as ctx:
+                final = self.build()
+        message = str(ctx.warning)
+        self.assertIn(os.path.dirname(final), message)
+        self.assertIn("fsync failed", message)
+
     def test_fsync_failure_after_publish_does_not_raise(self):
         real = datasets._sync_dir
         calls = []

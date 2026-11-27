@@ -34,7 +34,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 - 0.1.0-7 La licencia viaja (invariante 1) y `datasets/<objetivo>/<versión>/` en el repo. `hecho`: `gforge.datasets` (`build` criba, parte y escribe `<partición>.jsonl`, `LICENSE` y `manifest.json` `gforge.dataset/0` provisional; `combine`/`model_licence` dan la licencia más restrictiva; una versión no se sobrescribe).
 - 0.1.0-8 Barrido de leves de `gforge/datasets.py` (retro del bloque 0.1.0). `hecho`: `combine` falla con `LicenceError` si mezcla CC BY-SA con NC; `build` publica sin ventana `exists`→`rename`, con `fsync` y limpia el temporal; `date` debe ser ISO; `_record` recoge los `__slots__` heredados.
 - 0.1.0-9 Barrido de leves de 0.1.0-5. `hecho`: los patrones de maestros abiertos se anclan al inicio del nombre (tras el prefijo de proveedor) y llama-3.2 visión y deepseek-r1-distill-llama se rechazan; `_narration` rechaza una narración vacía; `read_distillation` acepta `.JSONL`; `_publish` documenta el reemplazo de un directorio vacío en POSIX, con test.
-- 0.1.0-10 Barrido de leves de `gforge/datasets.py` (retro 2026-11-27). `_record` falla con `DatasetError` ante un slot `__dict__`; `_publish` avisa si falla el fsync del directorio padre; el docstring de `build` dice la excepción del directorio de versión vacío. En curso.
+- 0.1.0-10 Barrido de leves de `gforge/datasets.py` (retro 2026-11-27). `_record` falla con `DatasetError` ante un slot `__dict__`; `_publish` avisa si falla el fsync del directorio padre; el docstring de `build` dice la excepción del directorio de versión vacío. `hecho`, con test rojo sin arreglo en los dos primeros.
 
 ## 0.2.0 en adelante
 

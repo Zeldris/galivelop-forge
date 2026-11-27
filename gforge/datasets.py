@@ -15,6 +15,7 @@ import os
 import re
 import shutil
 import tempfile
+import warnings
 from typing import Any, Dict, FrozenSet, Iterable, List, Sequence
 
 from gforge import filters, splits
@@ -102,7 +103,11 @@ def _record(example: Any) -> Dict[str, Any]:
         if isinstance(declared, str):  # `__slots__ = "id"` is the single slot "id", not "i", "d"
             declared = (declared,)
         for slot in declared:
-            if slot in ("__dict__", "__weakref__"):
+            if slot == "__dict__":
+                raise DatasetError("{} declares `__dict__` in __slots__: its dynamic fields would be lost from "
+                                   "the jsonl and the manifest hashes; declare every field as a slot"
+                                   .format(type(example).__name__))
+            if slot == "__weakref__":
                 continue
             if slot not in slots:
                 slots.append(slot)
@@ -132,6 +137,9 @@ def build(
     test: float = splits.DEFAULT_TEST,
 ) -> str:
     """Screen, split and write `<root>/<target>/<version>/`; return its path. A version is never overwritten.
+
+    One exception: on POSIX an existing EMPTY version directory is replaced silently (it holds no published data;
+    see `_publish`). A non-empty one raises DatasetError.
 
     The licence is `combine` of the repo's content licence and the sources'. Rejected examples are listed in the
     manifest by id and rule only: their text (maybe personal data) is never written.
@@ -191,10 +199,11 @@ def build(
         raise
     try:
         _sync_dir(os.path.dirname(final))
-    except OSError:
+    except OSError as error:
         # The version is already published (renamed into place): failing now would make a retry hit "already
         # exists". Only the durability of the rename is unconfirmed; nothing published is cleaned up.
-        pass
+        warnings.warn("published {} but could not fsync its parent directory {}: {}".format(
+            final, os.path.dirname(final), error), RuntimeWarning)
     return final
 
 
