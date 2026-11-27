@@ -311,7 +311,6 @@
     "command": ""
   },
   "plan": ["docs/roadmap.md"],
-  "ciPython": ["3.8", "3.x"],
   "taskId": "\\d+\\.\\d+\\.\\d+-\\d+",
   "subagentCap": 30,
   "subagentCapStep": 10,

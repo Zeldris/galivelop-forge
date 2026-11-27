@@ -11,8 +11,7 @@ Lo que queda abierto; la bitácora solo apunta aquí. Se añade y se quita en es
   `pre-push` ni marca; añadirles una guarda en el flujo.
 - **Flujo, medio:** en `.github/workflows/check.yml`, `bash -c "$cmd"` hereda el here-string como stdin; un comando
   que lea stdin se come el resto del check. Arreglo: `</dev/null`. En el flujo.
-- **F1, leve:** fijar `ciPython: ["3.8", "3.x"]` en `.claude/gw.json` para correr el check en Python 3.8 de verdad
-  (hoy solo `tests/test_py38_syntax.py` lo aproxima); antes, comprobar que `setup-python` aún da 3.8 en `ubuntu-latest`.
+- **F1, leve:** correr el check en Python 3.8 de verdad: `ubuntu-latest` (26.04) ya no trae 3.8 en `setup-python` (probado 2026-11-27, CI rojo); hace falta un runner `ubuntu-22.04`/`24.04` fijo o un contenedor. Hoy solo `tests/test_py38_syntax.py` lo aproxima.
 - **Leve:** registrar `docs/roadmap.md` en `plan`/`roadmapFiles` de `.claude/gw.json` cuando se compruebe que su
   formato casa con lo que espera el flujo.
 - **0.1.0-5, leve:** `origin=synthetic` lo decide una marca que un jugador puede escribir: no es garantía de contenido
