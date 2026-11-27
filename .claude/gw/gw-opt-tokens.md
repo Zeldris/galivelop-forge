@@ -18,6 +18,9 @@ las crea una vez; desde entonces son del proyecto.
   conectores no se pueden desactivar (T1 rechazada): solo baja con menos llamadas.
 - `AGENTS.md` se leyó 12 veces en una sesión: se lee una vez por tarea; para una regla puntual, `grep -n` (T3).
 
+- Un test o módulo editado en varios ajustes seguidos se releyó 6 veces (`tests/test_source_tarkor.py`): léelo una vez
+  entero antes de editar y agrupa los ajustes en una sola pasada.
+
 ## Ajustes en vigor
 
 - Ventana de compactación automática: `CLAUDE_CODE_AUTO_COMPACT_WINDOW` en `.claude/settings.json`.
@@ -29,3 +32,5 @@ las crea una vez; desde entonces son del proyecto.
   los subagentes, 10,08 M.
 - 2026-11-27, sesión e13ef396 (bloque 0.1.0, revisión y arreglos): 16 llamadas, contexto medio 96 k (84 % arranque
   fijo), 1,53 M de entrada; con los subagentes (reviewer sonnet 5 llamadas, worker opus 9), 1,95 M.
+- 2026-11-27, sesión 3a868f3e (0.1.0-9, fase 1 y arreglos): 31 llamadas, contexto medio 105 k (76 % arranque fijo),
+  3,27 M de entrada; con los subagentes (reviewer opus 7 llamadas), 3,84 M. Sin compactaciones.
