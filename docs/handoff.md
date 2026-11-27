@@ -11,7 +11,7 @@
 | **Rama** | `claude/siguiente-ftxnzk` (sigue a `ccr-9d1db1a5-uvw2uh`, traída por fast-forward) |
 | **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4, 0.1.0-5, 0.1.0-6 y 0.1.0-7 (`gforge.datasets`; `gforge.splits`; `gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
 | **Último punto estable** | 0.1.0 cerrada y en `main` = 74c2004 (subida directa, confirmada por la persona; CI verde, marca de revisión `74c2004`). |
-| **Siguiente paso** | Empezar la 0.2.0 (según `docs/plan`) desde `main` con `merge-main.py`. 0.1.0-2/3 siguen bloqueadas por gart; leves de la revisión en `docs/records/pending.md`; Python 3.8 en el CI, pendiente. |
+| **Siguiente paso** | Notas de la release listas en `docs/records/release-0.1.0.md` (tag `v0.1.0-pre.1`, pre-release, sobre `74c2004`); sin publicar: las ejecuta un agente local con confirmación de la persona. Después, empezar la 0.2.0 desde `main` con `merge-main.py`. 0.1.0-2/3 siguen bloqueadas por gart; leves en `docs/records/pending.md`. |
 | **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (63 tests). |
 
 ## Para la próxima publicación
