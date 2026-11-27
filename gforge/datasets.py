@@ -8,6 +8,7 @@ restrictive of its datasets' (`combine`), so a Tarkor (CC BY-NC-SA) dataset can 
 Licences are modelled by their conditions (attribution, non-commercial, share-alike). Only the Creative Commons
 family is known; anything else fails closed until someone adds it to `LICENCES` with its conditions.
 """
+import datetime
 import hashlib
 import json
 import os
@@ -57,6 +58,13 @@ def combine(spdx_ids: Iterable[str]) -> str:
     if not ids:
         raise LicenceError("no licence given: a dataset or model without a licence is not valid")
     union = frozenset().union(*(conditions(i) for i in ids))
+    # Share-alike requires the result to carry the SA licence itself; NC added on top is a different licence.
+    if SA in union:
+        sa_plain = sorted({i for i in ids if SA in conditions(i) and NC not in conditions(i)})
+        nc = sorted({i for i in ids if NC in conditions(i)})
+        if sa_plain and nc:
+            raise LicenceError("cannot combine {} (share-alike) with {}: the result would add NC to a share-alike "
+                               "licence, which SA does not allow".format(", ".join(sa_plain), ", ".join(nc)))
     for spdx, (known, _url) in LICENCES.items():
         if known == union:
             return spdx
@@ -88,7 +96,12 @@ def _name(kind: str, value: Any) -> str:
 
 
 def _record(example: Any) -> Dict[str, Any]:
-    return {slot: getattr(example, slot) for slot in example.__slots__}
+    slots = []  # type: List[str]
+    for cls in type(example).__mro__:
+        for slot in getattr(cls, "__slots__", ()):
+            if slot not in slots:
+                slots.append(slot)
+    return {slot: getattr(example, slot) for slot in slots}
 
 
 def _canonical(record: Dict[str, Any]) -> str:
@@ -123,14 +136,18 @@ def build(
     for label, value in (("source", source), ("source_commit", source_commit), ("date", date)):
         if not isinstance(value, str) or not value.strip():
             raise DatasetError("{} is required (provenance)".format(label))
+    try:
+        datetime.datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        raise DatasetError("date {!r} must be ISO YYYY-MM-DD".format(date))
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
+        raise DatasetError("date {!r} must be ISO YYYY-MM-DD".format(date))
     spdx = combine([CONTENT_LICENCE] + list(source_licences))
     kept, rejections = filters.screen(examples, names)
     if not kept:
         raise DatasetError("no example left after the filters ({} rejected)".format(len(rejections)))
     result = splits.split([e.id for e in kept], seed, val, test)
     final = os.path.join(root, target, version)
-    if os.path.exists(final):
-        raise DatasetError("{} already exists: a published version is never overwritten, use a new version".format(final))
     by_id = {e.id: _record(e) for e in kept}
     lines = {id_: _canonical(r) for id_, r in by_id.items()}
     manifest = {
@@ -149,21 +166,55 @@ def build(
     manifest["dataset_hash"] = _hash_of(manifest["examples"])
     os.makedirs(os.path.join(root, target), exist_ok=True)
     work = tempfile.mkdtemp(prefix=".build-", dir=os.path.join(root, target))
-    try:
+    try:  # a hard kill (SIGKILL, power loss) cannot be cleaned up: a stray .build-* may remain.
         for name in (splits.TRAIN, splits.VAL, splits.TEST):
             with open(os.path.join(work, name + ".jsonl"), "w", encoding="utf-8", newline="\n") as handle:
                 for id_ in result.part(name):
                     handle.write(lines[id_] + "\n")
+                _sync(handle)
         with open(os.path.join(work, LICENSE_FILE), "w", encoding="utf-8", newline="\n") as handle:
             handle.write(_notice(manifest))
+            _sync(handle)
         with open(os.path.join(work, MANIFEST), "w", encoding="utf-8", newline="\n") as handle:
             json.dump(manifest, handle, ensure_ascii=False, sort_keys=True, indent=2)
             handle.write("\n")
-        os.rename(work, final)
+            _sync(handle)
+        _sync_dir(work)
+        _publish(work, final)
+        _sync_dir(os.path.dirname(final))
     except BaseException:
         shutil.rmtree(work, ignore_errors=True)
         raise
     return final
+
+
+def _sync(handle: Any) -> None:
+    handle.flush()
+    os.fsync(handle.fileno())
+
+
+def _sync_dir(path: str) -> None:
+    if os.name == "nt":  # directories cannot be opened for fsync there
+        return
+    fd = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def _publish(work: str, final: str) -> None:
+    """Move the finished directory into place; `rename` onto an existing non-empty directory fails, atomically."""
+    if os.path.lexists(final) and not os.path.isdir(final):
+        raise DatasetError("{} already exists and is not a dataset directory".format(final))
+    os.mkdir(final) if False else None
+    try:
+        os.rename(work, final)
+    except OSError as error:
+        if os.path.lexists(final):
+            raise DatasetError("{} already exists: a published version is never overwritten, use a new version"
+                               .format(final))
+        raise DatasetError("cannot create {}: {}".format(final, error))
 
 
 def _notice(manifest: Dict[str, Any]) -> str:
