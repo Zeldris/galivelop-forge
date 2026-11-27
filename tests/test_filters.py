@@ -146,7 +146,7 @@ class Teacher(unittest.TestCase):
 
     def test_own_licence_models_are_excluded(self):
         for teacher in ("x:llama-3.2-11b-vision-instruct", "x:meta-llama/Llama-3.2-90B-Vision",
-                        "x:deepseek-r1-distill-llama-70b"):
+                        "x:deepseek-r1-distill-llama-70b", "ollama:deepseek-r1:70b", "ollama:deepseek-r1:8b"):
             self.assertIn("is excluded", teacher_rejection(teacher), teacher)
 
     def test_model_of(self):

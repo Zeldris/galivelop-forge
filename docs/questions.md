@@ -56,3 +56,10 @@ file (format: header of scripts/questions.py). Answer by number: `questions.py a
 - Recommendation: a) Dejo la propuesta conservadora tal cual (Llama 3.1+/4, DeepSeek-R1/V3, gpt-oss abiertos; Claude, GPT, o1-o9 y Gemini cerrados; cualquier otro, rechazado) y tú me confirmas o añades familias. Si Tarkor genera sobre todo con gemini:…, esos ejemplos quedan fuera y conviene regenerarlos con un maestro abierto.
 - Answer: a
 - Answered: 2026-11-27
+
+## Q-7
+- Refs: 0.1.0-9
+- Status: open
+- Asked: 2026-11-27
+- Question: En read_dpo, ¿debe rechazarse también una narración vacía en el lado rejected? Hoy una sola pareja así hace fallar la lectura entera de live-dpo.jsonl.
+- Recommendation: Pedir narración no vacía solo en SFT y en chosen; en rejected se acepta vacía (una salida vacía del narrador local es un negativo DPO válido), con un test por lado.

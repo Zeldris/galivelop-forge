@@ -22,6 +22,8 @@ EXCLUDED_TEACHERS: Sequence[Tuple[str, str]] = (
     ("*llama-3.2*vision*", "Llama 3.2 vision has its own licence (not covered by the 3.1+ list)"),
     ("*llama3.2*vision*", "Llama 3.2 vision has its own licence (not covered by the 3.1+ list)"),
     ("*deepseek-r1-distill-llama*", "DeepSeek-R1-Distill-Llama carries the Llama licence of its base"),
+    ("deepseek-r1:70b*", "Ollama deepseek-r1:70b is DeepSeek-R1-Distill-Llama-70B (Llama licence of its base)"),
+    ("deepseek-r1:8b*", "Ollama deepseek-r1:8b may be DeepSeek-R1-Distill-Llama-8B (Llama licence of its base)"),
 )
 
 # Patterns are anchored at the start of the model name: `model_of` already drops any provider or organisation
