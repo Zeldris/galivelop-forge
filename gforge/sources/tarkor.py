@@ -86,17 +86,23 @@ class PreferenceExample:
 
 
 def _lines(path: str) -> Iterator[Tuple[int, Dict[str, Any]]]:
-    with open(path, encoding="utf-8") as fh:
-        for number, raw in enumerate(fh, 1):
-            if not raw.strip():
-                continue
-            try:
-                record = json.loads(raw)
-            except ValueError as exc:
-                raise SourceError(path, number, "not valid JSON ({})".format(exc))
-            if not isinstance(record, dict):
-                raise SourceError(path, number, "a record must be a JSON object")
-            yield number, record
+    number = 0
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for number, raw in enumerate(fh, 1):
+                if not raw.strip():
+                    continue
+                try:
+                    record = json.loads(raw)
+                except ValueError as exc:
+                    raise SourceError(path, number, "not valid JSON ({})".format(exc))
+                if not isinstance(record, dict):
+                    raise SourceError(path, number, "a record must be a JSON object")
+                yield number, record
+    except UnicodeDecodeError as exc:
+        raise SourceError(path, number + 1, "not valid UTF-8 ({})".format(exc))
+    except OSError as exc:
+        raise SourceError(path, number, "cannot be read ({})".format(exc.strerror or exc))
 
 
 def _text(record: Dict[str, Any], key: str, path: str, line: int) -> str:
@@ -143,7 +149,8 @@ def read_distillation(directory: str) -> List[SftExample]:
     """Read every `<category>.jsonl` of a distillation export, in name order (deterministic)."""
     if not os.path.isdir(directory):
         raise SourceError(directory, 0, "distillation export directory not found")
-    names = sorted(n for n in os.listdir(directory) if n.endswith(".jsonl") and n not in GAME_SPLIT_FILES)
+    names = sorted(n for n in os.listdir(directory) if n.endswith(".jsonl") and n not in GAME_SPLIT_FILES
+        and os.path.isfile(os.path.join(directory, n)))
     if not names:
         raise SourceError(directory, 0, "no <category>.jsonl files (train/eval are skipped)")
     seen: Dict[str, str] = {}
@@ -183,6 +190,8 @@ def read_dpo(path: str) -> List[PreferenceExample]:
         if match:
             scenario_id = match.group(1)
             prompt[1]["content"] = prompt[1]["content"][: match.start()]
+            if not prompt[1]["content"].strip():
+                raise SourceError(path, line, "prompt[1].content is empty after the scenario mark")
         _no_duplicate(seen, id, path, line)
         examples.append(PreferenceExample(id, teacher, prompt, chosen, rejected, scenario_id))
     return examples

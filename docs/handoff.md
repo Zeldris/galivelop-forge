@@ -10,9 +10,9 @@
 |---|---|
 | **Rama** | `claude/siguiente-ftxnzk` (sigue a `ccr-9d1db1a5-uvw2uh`, traída por fast-forward) |
 | **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4 y 0.1.0-5 (`gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
-| **Último punto estable** | Este commit (0.1.0-5). `main` = d31f9f8. |
-| **Siguiente paso** | 0.1.0-6: particiones deterministas por semilla y hash (invariante 3), con `test` como lote de reserva del GVE. Si llega la respuesta a Q-6, ajustar antes `gforge/teachers.py`. |
-| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (34 tests). |
+| **Último punto estable** | Arreglos de la revisión del bloque 0.1.0 (Findings: 6). `main` = d31f9f8. |
+| **Siguiente paso** | 0.1.0-6: particiones deterministas por semilla y hash (invariante 3), con `test` como lote de reserva del GVE. Si llega la respuesta a Q-6, ajustar antes `gforge/teachers.py` (y anclar sus patrones, ver pending). |
+| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (41 tests). |
 
 ## Para la próxima publicación
 

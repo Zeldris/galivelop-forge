@@ -94,6 +94,17 @@ class Distillation(Export):
         self.write("train.jsonl", [sft("c1", "combate")])
         self.assertReason(lambda: read_distillation(self.dir), "no <category>.jsonl")
 
+    def test_invalid_utf8_is_a_source_error(self):
+        path = os.path.join(self.dir, "viaje.jsonl")
+        with open(path, "wb") as fh:
+            fh.write(b"\xff\xfe\n")
+        self.assertReason(lambda: read_distillation(self.dir), "viaje.jsonl", "not valid UTF-8")
+
+    def test_directories_named_jsonl_are_ignored(self):
+        self.write("viaje.jsonl", [sft("a", "viaje")])
+        os.mkdir(os.path.join(self.dir, "otra.jsonl"))
+        self.assertEqual([e.id for e in read_distillation(self.dir)], ["a"])
+
     def test_missing_directory(self):
         self.assertReason(lambda: read_distillation(os.path.join(self.dir, "nope")), "directory not found")
 
@@ -125,6 +136,10 @@ class Dpo(Export):
         del record["provider"]
         path = self.write("live-dpo.jsonl", [record])
         self.assertReason(lambda: read_dpo(path), "'provider' must be a non-empty string")
+
+    def test_prompt_empty_after_the_mark(self):
+        path = self.write("live-dpo.jsonl", [dpo("a", user="\n<!-- scenario-id: viaje-03 -->")])
+        self.assertReason(lambda: read_dpo(path), "prompt[1].content is empty after the scenario mark")
 
     def test_missing_file(self):
         self.assertReason(lambda: read_dpo(os.path.join(self.dir, "x.jsonl")), "DPO export file not found")

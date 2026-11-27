@@ -4,7 +4,9 @@
 dataset is exactly what the source exported. The list of real names comes from the caller (a file outside the
 repo, `load_names`): a list of real names in the repo would itself be personal data.
 """
+import json
 import re
+import unicodedata
 from typing import Any, Iterable, List, Optional, Pattern, Sequence, Tuple
 
 from gforge.teachers import teacher_rejection
@@ -15,9 +17,22 @@ RULE_NAME = "personal-data:name"
 RULE_TEACHER = "teacher"
 
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
-# 9 to 15 digits with optional spaces, dots or dashes between them and an optional +prefix: a phone number;
-# shorter runs (years, coins, hit points) are not.
-_PHONE = re.compile(r"(?<![\w+])\+?\d(?:[ .-]?\d){8,14}(?!\w)")
+# A run of digit groups (optionally in parentheses, optional +prefix) joined by any run of separators (Unicode
+# spaces, dots, dashes, slashes); it is a phone number when it has 9 to 15 digits. Commas and words end the run,
+# so "12-15, vida 80/100" never adds up.
+_GROUP = r"(?:\(\s*)?\d+(?:\s*\))?"
+_SEP = r"[\s.\-\u2013\u2014/]+"
+_PHONE = re.compile(r"(?<![\w+])\+?" + _GROUP + r"(?:" + _SEP + _GROUP + r")*(?!\w)")
+
+
+def _has_phone(text: str) -> bool:
+    return any(9 <= sum(c.isdigit() for c in m.group()) <= 15 for m in _PHONE.finditer(text))
+
+
+def _fold(text: str) -> str:
+    """NFKD, no combining marks, casefolded: accents, case and Unicode form do not hide a name."""
+    decomposed = unicodedata.normalize("NFKD", text)
+    return "".join(c for c in decomposed if not unicodedata.combining(c)).casefold()
 
 
 class Rejection:
@@ -39,27 +54,31 @@ class Rejection:
 
 def load_names(path: str) -> List[str]:
     """Real names to filter, one per line; blank lines and `#` comments are skipped."""
-    with open(path, encoding="utf-8") as fh:
-        return [line.strip() for line in fh if line.strip() and not line.lstrip().startswith("#")]
+    with open(path, encoding="utf-8-sig") as fh:
+        names = [line.strip() for line in fh if line.strip() and not line.lstrip().startswith("#")]
+    if not names:
+        raise ValueError("{}: no names (the file is empty or only has comments)".format(path))
+    return names
 
 
 def _name_patterns(names: Iterable[str]) -> List[Tuple[str, Pattern[str]]]:
     out = []
     for name in names:
-        name = " ".join(name.split())
+        name = " ".join(_fold(name).split())
         if name:
             words = r"\s+".join(re.escape(w) for w in name.split(" "))
-            out.append((name, re.compile(r"(?<!\w)" + words + r"(?!\w)", re.IGNORECASE)))
+            out.append((name, re.compile(r"(?<!\w)" + words + r"(?!\w)")))
     return out
 
 
 def _personal(text: str, patterns) -> Optional[Tuple[str, str]]:
     if _EMAIL.search(text):
         return RULE_EMAIL, "contains an e-mail address"
-    if _PHONE.search(text):
+    if _has_phone(text):
         return RULE_PHONE, "contains a phone number"
+    folded = _fold(text) if patterns else ""
     for _name, pattern in patterns:
-        if pattern.search(text):
+        if pattern.search(folded):
             return RULE_NAME, "contains a real name from the names list"
     return None
 
@@ -69,10 +88,33 @@ def personal_data(text: str, names: Iterable[str] = ()) -> Optional[Tuple[str, s
     return _personal(text, _name_patterns(names))
 
 
+def _strings(value: Any) -> Iterable[str]:
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for item in value.values():
+            for text in _strings(item):
+                yield text
+    elif isinstance(value, list):
+        for item in value:
+            for text in _strings(item):
+                yield text
+
+
 def _texts(example) -> Iterable[Tuple[str, str]]:
     for field in ("messages", "prompt", "chosen", "rejected"):
         for index, message in enumerate(getattr(example, field, None) or ()):
-            yield "{}[{}]".format(field, index), message["content"]
+            where = "{}[{}]".format(field, index)
+            content = message["content"]
+            yield where, content
+            if message.get("role") == "assistant":
+                try:
+                    decoded = json.loads(content)
+                except ValueError:
+                    continue
+                # JSON escapes (\n, \u00e9) hide text in the raw form: screen every decoded string too.
+                for text in _strings(decoded):
+                    yield where, text
 
 
 def check(example, names: Sequence[str] = ()) -> Optional[Rejection]:

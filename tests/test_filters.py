@@ -1,6 +1,8 @@
 """0.1.0-5: personal-data filter (invariant 2) and open-teacher filter (invariant 9)."""
+import json
 import os
 import tempfile
+import unicodedata
 import unittest
 
 from gforge.filters import (
@@ -71,6 +73,46 @@ class PersonalData(unittest.TestCase):
             with open(path, "w", encoding="utf-8") as fh:
                 fh.write("# jugadores\nAna López\n\n  Iker  \n")
             self.assertEqual(load_names(path), ["Ana López", "Iker"])
+
+    def test_escaped_assistant_json_does_not_hide_a_phone_or_name(self):
+        for narration in ("hola\n600123456", "tel\t600 123 456", "Escribe a Jos\u00e9"):
+            text = json.dumps({"narration": narration, "newFacts": []})
+            rejection = check(sft("s1", assistant=text), names=["José"])
+            self.assertIsNotNone(rejection, narration)
+            self.assertIn("messages[2]", rejection.reason)
+        text = json.dumps({"narration": "ok", "newFacts": ["llama al 600123456"]})
+        pair_ = pair("p1")
+        pair_.chosen[0]["content"] = text
+        rejection = check(pair_)
+        self.assertEqual(rejection.rule, RULE_PHONE)
+        self.assertIn("chosen[0]", rejection.reason)
+
+    def test_names_ignore_case_accents_and_unicode_form(self):
+        self.assertEqual(personal_data("Hola, Jose.", ["José"])[0], RULE_NAME)
+        self.assertEqual(personal_data("Hola, JOSÉ.", ["Jose"])[0], RULE_NAME)
+        nfd = unicodedata.normalize("NFD", "José")
+        self.assertEqual(personal_data("Hola " + nfd, ["José"])[0], RULE_NAME)
+        self.assertEqual(personal_data("Hola José", [nfd])[0], RULE_NAME)
+        self.assertIsNone(personal_data("Ikerion", ["Iker"]))
+
+    def test_load_names_bom_and_empty(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "names.txt")
+            with open(path, "w", encoding="utf-8-sig") as fh:
+                fh.write("Ana\n")
+            self.assertEqual(load_names(path), ["Ana"])
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write("# solo comentarios\n\n")
+            with self.assertRaises(ValueError) as cm:
+                load_names(path)
+            self.assertIn("no names", str(cm.exception))
+            self.assertIn(path, str(cm.exception))
+
+    def test_phone_separators(self):
+        for text in ("(91) 123 45 67", "600  123 456", "600/123/456", "+34 (612) 345-678",
+                     "600\u00a0123\u00a0456", "600 \u2013 123 \u2014 456", "600.123.456"):
+            self.assertEqual(personal_data(text)[0], RULE_PHONE, text)
+        self.assertIsNone(personal_data("Daño 12-15, vida 80/100, oro 200 y 1247."))
 
 
 class Teacher(unittest.TestCase):
