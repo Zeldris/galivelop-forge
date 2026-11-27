@@ -9,10 +9,10 @@
 | Campo | Valor |
 |---|---|
 | **Rama** | `claude/siguiente-ftxnzk` (sigue a `ccr-9d1db1a5-uvw2uh`, traída por fast-forward) |
-| **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4 y 0.1.0-5 (`gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
-| **Último punto estable** | Arreglos de la revisión del bloque 0.1.0 (Findings: 6). `main` = d31f9f8. |
-| **Siguiente paso** | 0.1.0-6: particiones deterministas por semilla y hash (invariante 3), con `test` como lote de reserva del GVE. Si llega la respuesta a Q-6, ajustar antes `gforge/teachers.py` (y anclar sus patrones, ver pending). |
-| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (41 tests). |
+| **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4, 0.1.0-5 y 0.1.0-6 (`gforge.splits`; `gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
+| **Último punto estable** | 0.1.0-6 hecha (`gforge.splits`). `main` = d31f9f8. |
+| **Siguiente paso** | 0.1.0-7: la licencia viaja (invariante 1) y `datasets/<objetivo>/<versión>/` en el repo. Si llega la respuesta a Q-6, ajustar antes `gforge/teachers.py` (y anclar sus patrones, ver pending). |
+| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (50 tests). |
 
 ## Para la próxima publicación
 
@@ -20,10 +20,11 @@ F0: el DDD con las decisiones de §8 cerradas y el reparto en versiones; espera 
 
 ## Hecho (5 últimas)
 
-1. 2026-11-27 — 0.1.0-5: filtros de datos personales y de maestro (`gforge/filters.py`, `gforge/teachers.py`); `pyproject.toml` empaqueta también `gforge.sources`.
-2. 2026-11-26 — 0.1.0-2: gart leído con un subagente; sin código, ADR 0002 sin detalle del test de huella, sin LICENSE ni registro de espacios. Preguntas Q-1..Q-3, respondidas: seguir con 0.1.0-4..7 y aviso a gart escrito (`docs/records/aviso-gart.md`, con el choque Python 3.10 frente a 3.8).
-3. 2026-11-26 — 0.1.0-1: paquete `gforge` con `pyproject.toml`, `ports.py` (`PortUnavailable` y los puertos `Unavailable*`), `services.py`; `tests/test_smoke.py` sustituido.
-4. 2026-11-26 — Galivelop-workflow v0.9.1 instalado (`/gw-init`), licencia MIT + CC BY-NC-SA 4.0, DDD borrador 1 en `docs/ddd.md`.
+1. 2026-11-27 — 0.1.0-6: particiones deterministas (`gforge/splits.py`): cubo = sha256(semilla, id), test < val < train; id repetido o semilla vacía fallan con motivo.
+2. 2026-11-27 — 0.1.0-5: filtros de datos personales y de maestro (`gforge/filters.py`, `gforge/teachers.py`); `pyproject.toml` empaqueta también `gforge.sources`.
+3. 2026-11-26 — 0.1.0-2: gart leído con un subagente; sin código, ADR 0002 sin detalle del test de huella, sin LICENSE ni registro de espacios. Preguntas Q-1..Q-3, respondidas: seguir con 0.1.0-4..7 y aviso a gart escrito (`docs/records/aviso-gart.md`, con el choque Python 3.10 frente a 3.8).
+4. 2026-11-26 — 0.1.0-1: paquete `gforge` con `pyproject.toml`, `ports.py` (`PortUnavailable` y los puertos `Unavailable*`), `services.py`; `tests/test_smoke.py` sustituido.
+5. 2026-11-26 — Galivelop-workflow v0.9.1 instalado (`/gw-init`), licencia MIT + CC BY-NC-SA 4.0, DDD borrador 1 en `docs/ddd.md`.
 
 ## Pendiente
 
