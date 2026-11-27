@@ -27,3 +27,5 @@ las crea una vez; desde entonces son del proyecto.
 <!-- Cifras medidas con las que comparar: fecha, sesión, contexto medio, llamadas, total. -->
 - 2026-11-26, sesión a54c4183 (instalación, F-1, F0): 64 llamadas, contexto medio 117 k, 7,48 M de entrada; con
   los subagentes, 10,08 M.
+- 2026-11-27, sesión e13ef396 (bloque 0.1.0, revisión y arreglos): 16 llamadas, contexto medio 96 k (84 % arranque
+  fijo), 1,53 M de entrada; con los subagentes (reviewer sonnet 5 llamadas, worker opus 9), 1,95 M.
