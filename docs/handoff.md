@@ -11,7 +11,7 @@
 | **Rama** | `claude/siguiente-ftxnzk` (sigue a `ccr-9d1db1a5-uvw2uh`, traída por fast-forward) |
 | **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4, 0.1.0-5, 0.1.0-6 y 0.1.0-7 (`gforge.datasets`; `gforge.splits`; `gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
 | **Último punto estable** | 0.1.0-8 hecha (barrido de `gforge/datasets.py`, 76 tests). `main` = d31f9f8. |
-| **Siguiente paso** | Retro del bloque 0.1.0 aprobada y aplicada (0.1.0-8 hecha: barrido de `datasets.py`; `plan` en `gw.json`; `ciPython` probado y revertido (sin Python 3.8 en `ubuntu-latest`)). Mirar el CI de lo subido, el CI de esta subida. Fase 3: `reviewed.sh` (revisión solo de los commits de la fase 2) y `main` solo con confirmación de la persona. 0.1.0-2/3 bloqueadas por gart; Q-6 abierta. |
+| **Siguiente paso** | CI de `010fc49` verde (el rojo de `38f9d98` era Python 3.8 en `ubuntu-latest`, ya revertido y en pendientes). La persona aceptó las recomendaciones: subir a `main` por vía directa y Q-6 respondida «a» (lista conservadora tal cual). Fase 3 en curso: revisión de `9bf05c9` (único código de la fase 2) por `gw-reviewer`; arreglar lo grave/medio, `reviewed.sh`, `git push` y subida a `main`. 0.1.0-2/3 bloqueadas por gart. |
 | **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (63 tests). |
 
 ## Para la próxima publicación

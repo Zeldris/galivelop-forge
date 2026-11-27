@@ -50,7 +50,9 @@ file (format: header of scripts/questions.py). Answer by number: `questions.py a
 
 ## Q-6
 - Refs: 0.1.0-5
-- Status: open
+- Status: answered
 - Asked: 2026-11-27
 - Question: La lista de maestros abiertos (gforge/teachers.py) decide qué ejemplos de Tarkor entran. ¿La confirmas? Propuesta: abiertos Llama 3.1+/Llama 4, DeepSeek-R1/V3 y gpt-oss; cerrados Claude, GPT, o1-o9 y Gemini (Gemini incluye todo lo de Tarkor con provider gemini:…); el resto (Qwen, Mistral, Gemma…) se rechaza hasta que alguien lo añada con su licencia. ¿O sigue otra lista ya decidida en galivelop-developer?
 - Recommendation: a) Dejo la propuesta conservadora tal cual (Llama 3.1+/4, DeepSeek-R1/V3, gpt-oss abiertos; Claude, GPT, o1-o9 y Gemini cerrados; cualquier otro, rechazado) y tú me confirmas o añades familias. Si Tarkor genera sobre todo con gemini:…, esos ejemplos quedan fuera y conviene regenerarlos con un maestro abierto.
+- Answer: a
+- Answered: 2026-11-27
