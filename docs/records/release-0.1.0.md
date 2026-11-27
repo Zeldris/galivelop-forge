@@ -1,7 +1,7 @@
 # Notas de la release 0.1.0 (parcial, pre-release)
 
-Listas para que un agente local las publique. Nada de esto se ha publicado: el tag y la release los crea quien las
-ejecute, con confirmación de la persona.
+**Publicada** el 2026-11-27, con confirmación de la persona:
+<https://github.com/Zeldris/galivelop-forge/releases/tag/v0.1.0-pre.1>. Lo de abajo queda como registro de cómo se hizo.
 
 - **Commit a etiquetar:** `74c2004` (marca de revisión; en `main`, CI en verde). Comprueba que sigue siendo
   ancestro de `origin/main` antes de etiquetar.
