@@ -32,6 +32,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 - 0.1.0-5 Filtros de datos personales (invariante 2) y de maestro (invariante 9, lista de maestros abiertos). `hecho`: `gforge.filters` y `gforge.teachers`; la lista de maestros, a falta de que la persona la confirme (Q-6).
 - 0.1.0-6 Particiones deterministas por semilla y hash (invariante 3); `test` como lote de reserva del GVE. `hecho`: `gforge.splits` (cubo por sha256 de semilla e id; no depende del orden ni de los demás ejemplos).
 - 0.1.0-7 La licencia viaja (invariante 1) y `datasets/<objetivo>/<versión>/` en el repo. `hecho`: `gforge.datasets` (`build` criba, parte y escribe `<partición>.jsonl`, `LICENSE` y `manifest.json` `gforge.dataset/0` provisional; `combine`/`model_licence` dan la licencia más restrictiva; una versión no se sobrescribe).
+- 0.1.0-8 Barrido de leves de `gforge/datasets.py` (retro del bloque 0.1.0). `hecho`: `combine` falla con `LicenceError` si mezcla CC BY-SA con NC; `build` publica sin ventana `exists`→`rename`, con `fsync` y limpia el temporal; `date` debe ser ISO; `_record` recoge los `__slots__` heredados.
 
 ## 0.2.0 en adelante
 

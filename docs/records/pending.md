@@ -22,10 +22,4 @@ Lo que queda abierto; la bitácora solo apunta aquí. Se añade y se quita en es
 - **0.1.0-5, leve:** `SourceError` y `PortUnavailable` no se deserializan con pickle (`__init__` de 3 argumentos).
 - **0.1.0-5, leve:** `_narration` acepta una `narration` vacía: decidir si se rechaza.
 - **0.1.0-5, leve:** `read_distillation` ignora sin avisar lo que no termina en `.jsonl` (p. ej. `Cat.JSONL`).
-- **0.1.0-7, leve:** `combine` mezcla CC BY-SA con otra licencia (p. ej. NC) y da NC-SA, que SA no permite; documentarlo o
-  fallar.
-- **0.1.0-7, leve:** `build` comprueba `exists` y luego hace `rename` (ventana entre ambos) y no hace `fsync` de los
-  archivos ni del directorio al crear la versión.
-- **0.1.0-7, leve:** `build` no valida que `date` tenga formato ISO.
-- **0.1.0-6/7, observación:** `_seed` trata igual `1` y `"1"`; `_record` usa solo los `__slots__` de la clase concreta
-  (no los heredados); tras un kill puede quedar un `.build-*` huérfano.
+- **0.1.0-6, observación:** `_seed` trata igual `1` y `"1"`; un kill duro puede dejar un `.build-*` huérfano (no se puede cubrir).
