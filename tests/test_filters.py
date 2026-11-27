@@ -136,6 +136,19 @@ class Teacher(unittest.TestCase):
                         "sambanova:DeepSeek-R1"):
             self.assertIsNone(teacher_rejection(teacher), teacher)
 
+    def test_substring_in_the_middle_does_not_enter(self):
+        for teacher in ("groq:my-llama-3.3-finetune", "x:foo-deepseek-r1", "x:not-gpt-oss", "x:acme/zllama-4-x"):
+            self.assertIn("not on the open-teacher list", teacher_rejection(teacher), teacher)
+
+    def test_prefixes_are_accepted_when_anchored(self):
+        for teacher in ("ollama:ollama/llama-3.1-8b", "hf:meta-llama/Llama-4-Scout", "x:org/deepseek-v3"):
+            self.assertIsNone(teacher_rejection(teacher), teacher)
+
+    def test_own_licence_models_are_excluded(self):
+        for teacher in ("x:llama-3.2-11b-vision-instruct", "x:meta-llama/Llama-3.2-90B-Vision",
+                        "x:deepseek-r1-distill-llama-70b"):
+            self.assertIn("is excluded", teacher_rejection(teacher), teacher)
+
     def test_model_of(self):
         self.assertEqual(model_of("cloudflare:@cf/meta/Llama-3.3-70b"), "llama-3.3-70b")
         self.assertEqual(model_of("claude-3-haiku"), "claude-3-haiku")

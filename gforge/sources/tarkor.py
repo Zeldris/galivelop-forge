@@ -137,6 +137,8 @@ def _narration(content: str, where: str, path: str, line: int) -> None:
         raise SourceError(path, line, "{} is not a JSON NarrationResult".format(where))
     if not isinstance(result, dict) or not isinstance(result.get("narration"), str):
         raise SourceError(path, line, "{} has no string 'narration'".format(where))
+    if not result["narration"].strip():
+        raise SourceError(path, line, "{} has an empty 'narration'".format(where))
     facts = result.get("newFacts")
     if not isinstance(facts, list) or not all(isinstance(f, str) for f in facts):
         raise SourceError(path, line, "{} has no 'newFacts' list of strings".format(where))
@@ -152,7 +154,7 @@ def read_distillation(directory: str) -> List[SftExample]:
     """Read every `<category>.jsonl` of a distillation export, in name order (deterministic)."""
     if not os.path.isdir(directory):
         raise SourceError(directory, 0, "distillation export directory not found")
-    names = sorted(n for n in os.listdir(directory) if n.endswith(".jsonl") and n not in GAME_SPLIT_FILES
+    names = sorted(n for n in os.listdir(directory) if n.lower().endswith(".jsonl") and n.lower() not in GAME_SPLIT_FILES
         and os.path.isfile(os.path.join(directory, n)))
     if not names:
         raise SourceError(directory, 0, "no <category>.jsonl files (train/eval are skipped)")

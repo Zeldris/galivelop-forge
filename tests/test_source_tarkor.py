@@ -81,6 +81,16 @@ class Distillation(Export):
         self.write("viaje.jsonl", [sft("v1", "viaje"), sft("v2", "viaje", assistant='{"text": "x"}')])
         self.assertReason(lambda: read_distillation(self.dir), "viaje.jsonl:2", "no string 'narration'")
 
+    def test_empty_or_blank_narration_is_rejected(self):
+        for blank in ("", "   \n"):
+            self.write("viaje.jsonl", [sft("v1", "viaje", assistant=json.dumps({"narration": blank, "newFacts": []}))])
+            self.assertReason(lambda: read_distillation(self.dir), "viaje.jsonl:1", "empty 'narration'")
+
+    def test_extension_is_case_insensitive(self):
+        self.write("Cat.JSONL", [sft("a", "Cat")])
+        self.write("Train.JSONL", [sft("t", "combate")])
+        self.assertEqual([e.id for e in read_distillation(self.dir)], ["a"])
+
     def test_repeated_id_across_files(self):
         self.write("combate.jsonl", [sft("x", "combate")])
         self.write("viaje.jsonl", [sft("x", "viaje")])

@@ -134,6 +134,13 @@ class BuildTests(Base):
             self.build()
         self.assertGreaterEqual(fsync.call_count, 5)  # 3 partitions + LICENSE + manifest (+ directories)
 
+    def test_empty_existing_version_directory_is_replaced_on_posix(self):
+        if os.name != "posix":
+            self.skipTest("Windows refuses to replace an existing directory")
+        os.makedirs(os.path.join(self.root, "tarkor.narrator", "0.1.0"))
+        final = self.build()
+        self.assertTrue(os.path.isfile(os.path.join(final, "manifest.json")))
+
     def test_existing_version_is_detected_at_rename_not_before(self):
         final = os.path.join(self.root, "tarkor.narrator", "0.1.0")
         real = os.rename

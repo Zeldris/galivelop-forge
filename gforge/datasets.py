@@ -215,6 +215,8 @@ def _sync_dir(path: str) -> None:
 
 def _publish(work: str, final: str) -> None:
     """Move the finished directory into place; no exists-then-rename window (an empty dir may be replaced)."""
+    # POSIX: rename replaces an existing EMPTY directory silently (Windows fails); a non-empty one fails and is
+    # reported as "already exists". Kept as is: an empty version directory holds no published data.
     try:
         os.rename(work, final)
     except OSError as error:
