@@ -11,7 +11,9 @@ Lo que queda abierto; la bitácora solo apunta aquí. Se añade y se quita en es
   `pre-push` ni marca; añadirles una guarda en el flujo.
 - **Flujo, medio:** en `.github/workflows/check.yml`, `bash -c "$cmd"` hereda el here-string como stdin; un comando
   que lea stdin se come el resto del check. Arreglo: `</dev/null`. En el flujo.
-- **F1, leve:** correr el check en Python 3.8 de verdad: `ubuntu-latest` (26.04) ya no trae 3.8 en `setup-python` (probado 2026-11-27, CI rojo); hace falta un runner `ubuntu-22.04`/`24.04` fijo o un contenedor. Hoy solo `tests/test_py38_syntax.py` lo aproxima.
+- **Flujo, W5 (nota para el repo del flujo), leve:** correr el check en Python 3.8 de verdad: `ubuntu-latest` (26.04) ya no trae 3.8 en `setup-python` (probado 2026-11-27, CI rojo); hace falta un runner `ubuntu-22.04`/`24.04` fijo o un contenedor. Hoy solo `tests/test_py38_syntax.py` lo aproxima.
+  `check.yml` es del flujo (`apply.py`, v0.9.1) y sin `pyproject.toml`/`requirements*.txt` `setup-python` se salta, así que
+  `ciPython` no basta: pedir al flujo un `ciRunner` o un job en contenedor con 3.8. No se edita `check.yml` aquí.
 - **Leve:** registrar `docs/roadmap.md` en `plan`/`roadmapFiles` de `.claude/gw.json` cuando se compruebe que su
   formato casa con lo que espera el flujo.
 - **0.1.0-6, observación:** `_seed` trata igual `1` y `"1"`; un kill duro puede dejar un `.build-*` huérfano (no se puede cubrir).
