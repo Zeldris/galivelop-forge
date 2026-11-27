@@ -38,8 +38,8 @@ class SourceError(ValueError):
         self.reason = reason
         super().__init__(str(self))
 
-    def __reduce__(self) -> Any:  # default pickling replays args=(message,) into the 3-argument init
-        return (type(self), (self.path, self.line, self.reason))
+    def __reduce__(self) -> Any:  # default pickling replays args=(message,) into the 3-argument init; __dict__ keeps add_note notes
+        return (type(self), (self.path, self.line, self.reason), self.__dict__)
 
     def __str__(self) -> str:
         where = self.path if self.line <= 0 else "{}:{}".format(self.path, self.line)

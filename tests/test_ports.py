@@ -77,13 +77,8 @@ class PickleTests(unittest.TestCase):
         back = pickle.loads(pickle.dumps(err))
         self.assertEqual((back.port, back.missing, back.remedy), ("measure", "gve", "install it"))
         self.assertEqual(str(back), str(err))
-
-    def test_source_error_round_trips(self):
-        from gforge.sources.tarkor import SourceError
-        err = SourceError("a.jsonl", 3, "bad shape")
-        back = pickle.loads(pickle.dumps(err))
-        self.assertEqual((back.path, back.line, back.reason), ("a.jsonl", 3, "bad shape"))
-        self.assertEqual(str(back), "a.jsonl:3: bad shape")
+        err.hint = "kept"
+        self.assertEqual(pickle.loads(pickle.dumps(err)).hint, "kept")
 
 
 if __name__ == "__main__":

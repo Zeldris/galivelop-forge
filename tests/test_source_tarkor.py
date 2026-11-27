@@ -1,5 +1,6 @@
 """0.1.0-4: the Tarkor source reads the distillation and DPO exports and fails closed on a bad line."""
 import json
+import pickle
 import os
 import tempfile
 import unittest
@@ -161,6 +162,16 @@ class Dpo(Export):
 
     def test_missing_file(self):
         self.assertReason(lambda: read_dpo(os.path.join(self.dir, "x.jsonl")), "DPO export file not found")
+
+
+class SourceErrorPickle(unittest.TestCase):
+    def test_source_error_round_trips(self):
+        err = SourceError("a.jsonl", 3, "bad shape")
+        err.hint = "kept"
+        back = pickle.loads(pickle.dumps(err))
+        self.assertEqual((back.path, back.line, back.reason), ("a.jsonl", 3, "bad shape"))
+        self.assertEqual(str(back), "a.jsonl:3: bad shape")
+        self.assertEqual(back.hint, "kept")  # __dict__ (where add_note keeps notes) survives
 
 
 if __name__ == "__main__":

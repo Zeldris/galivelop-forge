@@ -33,13 +33,15 @@ exportado y nunca ejecuta los scripts.
     guarda en `scenario_id` y marca `origin = "synthetic"`.
   - Sin esa marca, la pareja es de una partida real (`origin = "live"`) y puede llevar texto escrito por el jugador
     y nombres de personaje: el filtro de datos personales (invariante 2) la trata aparte.
+  - **La marca no es una garantía:** un jugador puede escribirla en su texto, así que `synthetic` no prueba que el
+    contenido lo sea; no te fíes solo de ella para saltarte el filtro.
 - **Faltan en el export** la categoría, el modelo local, `saveId`, `worldId` y `createdAt`.
 
 ## Qué hace el lector
 
 - Lee los `<categoría>.jsonl` en orden de nombre, que es determinista, y `live-dpo.jsonl` en el orden del archivo.
 - **Falla cerrado:** un JSON roto, un campo que falta, un rol equivocado, un `assistant` que no es un
-  `NarrationResult`, una categoría que no casa con su archivo o un `id` repetido paran la lectura con
+  `NarrationResult`, una narración vacía, una categoría que no casa con su archivo o un `id` repetido paran la lectura con
   `SourceError` (archivo:línea y motivo). No se salta nada.
 - La licencia (CC BY-NC-SA 4.0) no viaja en los exports: la pone forge (`gforge.datasets.build`, 0.1.0-7).
 
