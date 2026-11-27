@@ -41,7 +41,7 @@ exportado y nunca ejecuta los scripts.
 - **Falla cerrado:** un JSON roto, un campo que falta, un rol equivocado, un `assistant` que no es un
   `NarrationResult`, una categoría que no casa con su archivo o un `id` repetido paran la lectura con
   `SourceError` (archivo:línea y motivo). No se salta nada.
-- La licencia (CC BY-NC-SA 4.0) no viaja en los exports: la pone forge (0.1.0-7).
+- La licencia (CC BY-NC-SA 4.0) no viaja en los exports: la pone forge (`gforge.datasets.build`, 0.1.0-7).
 
 ## Pendiente
 
