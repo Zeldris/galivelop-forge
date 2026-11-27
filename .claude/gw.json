@@ -291,7 +291,7 @@
   },
   "logSections": [],
   "designReferences": [],
-  "authorDeny": [],
+  "authorDeny": ["noreply@anthropic.com", "Claude"],
   "protectedPaths": [],
   "staleRefs": [],
   "linkRoots": [],
