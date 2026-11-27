@@ -32,14 +32,18 @@ file (format: header of scripts/questions.py). Answer by number: `questions.py a
 
 ## Q-4
 - Refs: 0.1.0-4
-- Status: open
+- Status: answered
 - Asked: 2026-11-27
 - Question: Para 0.1.0-4 tengo que leer los exports de Tarkor, pero esta sesión no tiene su repo y el añadirlo (add_repo de Zeldris/Instalador-WMF-Tarkor) lo bloqueó el modo automático. ¿Cómo sigo? a) lo autorizas (o lo añades tú a la sesión) y lo leo con un subagente; b) me pasas un export de ejemplo (destilación y DPO) y trabajo sobre él; c) adelanto 0.1.0-5/6 sobre un registro genérico y dejo 0.1.0-4 bloqueada.
 - Recommendation: a) Añadirlo solo para lectura: lo lee un subagente y devuelve un resumen con rutas y el formato de los exports; desde aquí no se modifica.
+- Answer: a
+- Answered: 2026-11-27
 
 ## Q-5
 - Refs: 0.1.0-4
-- Status: open
+- Status: answered
 - Asked: 2026-11-27
 - Question: ¿Es Zeldris/Instalador-WMF-Tarkor el repo que tiene los scripts de dataset de Tarkor (es el único que encuentro con ese nombre)?
 - Recommendation: Sí, si los scripts del DDD (generate-distillation-dataset.ts, generate-dpo-dataset.ts…) están en ese repo; si no, dime cuál es.
+- Answer: World-Maker-Fantasy (Zeldris/World-Maker-Fantasy)
+- Answered: 2026-11-27
