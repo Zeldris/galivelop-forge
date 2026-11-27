@@ -12,7 +12,7 @@
 | **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-1, 0.1.0-4, 0.1.0-5, 0.1.0-6 y 0.1.0-7 (`gforge.datasets`; `gforge.splits`; `gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 abierta: confirmar la lista de maestros. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
 | **Último punto estable** | 0.1.0 cerrada y en `main` = 74c2004 (subida directa, confirmada por la persona; CI verde, marca de revisión `74c2004`). |
 | **Siguiente paso** | Notas de la release listas en `docs/records/release-0.1.0.md` (tag `v0.1.0-pre.1`, pre-release, sobre `74c2004`); **sin publicar**: la persona (2026-11-27) pidió que la publique un agente en local, no esta sesión; ese agente sigue «Orden de ejecución» del archivo y comprueba antes que `74c2004` es ancestro de `origin/main`. Hecho eso, apúntalo aquí. Después, empezar la 0.2.0 desde `main` con `merge-main.py`. 0.1.0-2/3 siguen bloqueadas por gart; leves en `docs/records/pending.md`. |
-| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (76 tests). |
+| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (80 tests). Tras 0.1.0: barridos tres leves de `gforge` (picklado de `SourceError`/`PortUnavailable`, `__slots__` str en `_record`, fsync tras publicar en `build`); quedan en `pending.md` los que piden decisión (narración vacía, `.JSONL`, comodines de maestros, `_publish` con directorio vacío). |
 
 ## Para la próxima publicación
 

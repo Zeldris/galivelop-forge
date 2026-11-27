@@ -98,7 +98,12 @@ def _name(kind: str, value: Any) -> str:
 def _record(example: Any) -> Dict[str, Any]:
     slots = []  # type: List[str]
     for cls in type(example).__mro__:
-        for slot in getattr(cls, "__slots__", ()):
+        declared = getattr(cls, "__slots__", ())
+        if isinstance(declared, str):  # `__slots__ = "id"` is the single slot "id", not "i", "d"
+            declared = (declared,)
+        for slot in declared:
+            if slot in ("__dict__", "__weakref__"):
+                continue
             if slot not in slots:
                 slots.append(slot)
     return {slot: getattr(example, slot) for slot in slots}
@@ -181,10 +186,15 @@ def build(
             _sync(handle)
         _sync_dir(work)
         _publish(work, final)
-        _sync_dir(os.path.dirname(final))
     except BaseException:
         shutil.rmtree(work, ignore_errors=True)
         raise
+    try:
+        _sync_dir(os.path.dirname(final))
+    except OSError:
+        # The version is already published (renamed into place): failing now would make a retry hit "already
+        # exists". Only the durability of the rename is unconfirmed; nothing published is cleaned up.
+        pass
     return final
 
 

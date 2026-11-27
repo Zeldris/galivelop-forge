@@ -1,4 +1,5 @@
 """Invariant 10: ports fail closed."""
+import pickle
 import unittest
 
 from gforge import (
@@ -70,5 +71,21 @@ class PortsFailClosed(unittest.TestCase):
         )
 
 
+class PickleTests(unittest.TestCase):
+    def test_port_unavailable_round_trips(self):
+        err = PortUnavailable("measure", "gve", "install it")
+        back = pickle.loads(pickle.dumps(err))
+        self.assertEqual((back.port, back.missing, back.remedy), ("measure", "gve", "install it"))
+        self.assertEqual(str(back), str(err))
+
+    def test_source_error_round_trips(self):
+        from gforge.sources.tarkor import SourceError
+        err = SourceError("a.jsonl", 3, "bad shape")
+        back = pickle.loads(pickle.dumps(err))
+        self.assertEqual((back.path, back.line, back.reason), ("a.jsonl", 3, "bad shape"))
+        self.assertEqual(str(back), "a.jsonl:3: bad shape")
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -18,10 +18,7 @@ Lo que queda abierto; la bitácora solo apunta aquí. Se añade y se quita en es
   sintético; documentarlo, o no fiarse solo de ella cuando se trate aparte lo `live`.
 - **0.1.0-5, leve:** los patrones abiertos de `gforge/teachers.py` con comodín inicial aceptan cualquier modelo que
   contenga la subcadena, y llama-3.2 visión / deepseek-r1-distill-llama tienen licencia propia: anclarlos al resolver Q-6.
-- **0.1.0-5, leve:** `SourceError` y `PortUnavailable` no se deserializan con pickle (`__init__` de 3 argumentos).
 - **0.1.0-5, leve:** `_narration` acepta una `narration` vacía: decidir si se rechaza.
 - **0.1.0-5, leve:** `read_distillation` ignora sin avisar lo que no termina en `.jsonl` (p. ej. `Cat.JSONL`).
 - **0.1.0-6, observación:** `_seed` trata igual `1` y `"1"`; un kill duro puede dejar un `.build-*` huérfano (no se puede cubrir).
-- **F1, leve (revisión fase 3 de 9bf05c9):** `datasets.build`: `_sync_dir` tras `_publish` corre dentro del `try`; si el fsync falla, lanza aunque la versión ya esté publicada (el reintento da «already exists»). Separar la publicación o documentarlo.
-- **F1, leve (revisión fase 3 de 9bf05c9):** `datasets._record` itera `__slots__` sin comprobar si es `str` (`__slots__ = "id"` da los slots `i`, `d`); saltar también `__dict__` y `__weakref__`.
 - **F1, leve (revisión fase 3 de 9bf05c9):** `_publish` sustituye en silencio un directorio de versión vacío ya existente en POSIX (en Windows falla); añadir el test del caso vacío o aceptar la diferencia. Nota: con `CC-BY-SA-4.0` en una fuente `build` nunca puede construir (falla cerrado frente a la licencia NC-SA del contenido); decirlo en la ficha de 0.1.0-8.

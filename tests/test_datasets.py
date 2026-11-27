@@ -63,6 +63,30 @@ class LicenceTests(unittest.TestCase):
 
 
 class BuildTests(Base):
+    def test_record_str_slots_is_one_slot(self):
+        class One:
+            __slots__ = "id"
+
+            def __init__(self):
+                self.id = "x"
+
+        self.assertEqual(datasets._record(One()), {"id": "x"})
+
+    def test_fsync_failure_after_publish_does_not_raise(self):
+        real = datasets._sync_dir
+        calls = []
+
+        def flaky(path):
+            calls.append(path)
+            if os.path.exists(os.path.join(self.root, "tarkor.narrator", "0.1.0")):
+                raise OSError("fsync failed")
+            real(path)
+
+        with mock.patch.object(datasets, "_sync_dir", flaky):
+            final = self.build()
+        self.assertTrue(os.path.isfile(os.path.join(final, "manifest.json")))
+        self.assertGreaterEqual(len(calls), 2)
+
     def test_layout_and_licence_written(self):
         path = self.build()
         self.assertEqual(path, os.path.join(self.root, "tarkor.narrator", "0.1.0"))
