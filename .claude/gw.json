@@ -212,7 +212,7 @@
   "worktreeDir": "",
   "reviewMark": "docs/records/reviewed.txt",
   "requireRetro": true,
-  "agentSignatures": true,
+  "agentSignatures": false,
   "commitFormat": "free",
   "commitRefs": false,
   "commitNext": true,

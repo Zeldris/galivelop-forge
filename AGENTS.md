@@ -16,7 +16,11 @@ en `.claude/skills/` y su configuración en `.claude/gw.json` (solo la lee `.cla
 5. Al empezar cada tarea, trae la rama protegida con `python3 .claude/gw/scripts/merge-main.py` (fetch, commit del
    ledger de métricas, se niega con más cambios sin commit y `git merge origin/main`; merge, nunca
    rebase: ramas subidas). Si el conflicto toca la misma lógica por los dos lados, se para y se consulta a la persona.
-6. **La sesión se abre con el repo como carpeta de trabajo.** Abierta en otra (una que contiene varios repos, la
+6. **Los commits van a nombre de la persona**, nunca de Claude: antes del primer commit,
+   `git config user.name "$(git log --reverse --format=%an | head -1)"` y
+   `git config user.email "$(git log --reverse --format=%ae | head -1)"` (la identidad del primer commit; no se
+   escribe en ningún archivo del repo).
+7. **La sesión se abre con el repo como carpeta de trabajo.** Abierta en otra (una que contiene varios repos, la
    carpeta personal), no carga `.claude/settings.json`: ni el tope de compactación, ni el gancho de inicio, ni el que
    vigila la subida a la rama protegida. Si pasa, dilo a la persona para que la reabra desde el repo; mientras tanto,
    `git config core.hooksPath .githooks` antes del primer commit y, antes de subir a `main` o de crear
