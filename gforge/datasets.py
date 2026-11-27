@@ -137,10 +137,10 @@ def build(
         if not isinstance(value, str) or not value.strip():
             raise DatasetError("{} is required (provenance)".format(label))
     try:
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
+            raise ValueError(date)
         datetime.datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
-        raise DatasetError("date {!r} must be ISO YYYY-MM-DD".format(date))
-    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
         raise DatasetError("date {!r} must be ISO YYYY-MM-DD".format(date))
     spdx = combine([CONTENT_LICENCE] + list(source_licences))
     kept, rejections = filters.screen(examples, names)
@@ -204,10 +204,7 @@ def _sync_dir(path: str) -> None:
 
 
 def _publish(work: str, final: str) -> None:
-    """Move the finished directory into place; `rename` onto an existing non-empty directory fails, atomically."""
-    if os.path.lexists(final) and not os.path.isdir(final):
-        raise DatasetError("{} already exists and is not a dataset directory".format(final))
-    os.mkdir(final) if False else None
+    """Move the finished directory into place; no exists-then-rename window (an empty dir may be replaced)."""
     try:
         os.rename(work, final)
     except OSError as error:

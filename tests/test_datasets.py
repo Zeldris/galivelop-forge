@@ -3,6 +3,7 @@ import json
 import os
 import tempfile
 import unittest
+from unittest import mock
 
 from gforge import datasets
 from gforge.datasets import DatasetError, LicenceError
@@ -39,8 +40,13 @@ class LicenceTests(unittest.TestCase):
         self.assertEqual(datasets.model_licence(manifests), "CC-BY-NC-SA-4.0")
 
     def test_union_of_conditions(self):
-        self.assertEqual(datasets.combine(["CC-BY-NC-4.0", "CC-BY-SA-4.0"]), "CC-BY-NC-SA-4.0")
+        self.assertEqual(datasets.combine(["CC-BY-NC-4.0", "CC-BY-NC-SA-4.0"]), "CC-BY-NC-SA-4.0")
+        self.assertEqual(datasets.combine(["CC-BY-4.0", "CC-BY-SA-4.0"]), "CC-BY-SA-4.0")
         self.assertEqual(datasets.combine(["CC0-1.0", "CC-BY-4.0"]), "CC-BY-4.0")
+
+    def test_share_alike_with_non_commercial_fails_closed(self):
+        with self.assertRaisesRegex(LicenceError, r"CC-BY-SA-4\.0.*CC-BY-NC-4\.0.*SA does not allow"):
+            datasets.combine(["CC-BY-NC-4.0", "CC-BY-SA-4.0"])
 
     def test_no_licence_or_unknown_fails_closed(self):
         with self.assertRaisesRegex(LicenceError, "no licence given"):
@@ -86,6 +92,46 @@ class BuildTests(Base):
         with self.assertRaisesRegex(DatasetError, "already exists"):
             self.build()
         self.assertEqual(datasets.find(self.root, "tarkor.narrator"), ["0.1.0"])
+
+    def test_date_must_be_iso(self):
+        for bad in ("27/11/2026", "2026-13-01", "2026-1-1", "2026-11-27T10:00", "hoy"):
+            with self.assertRaisesRegex(DatasetError, "must be ISO YYYY-MM-DD"):
+                self.build(date=bad)
+        self.assertEqual(datasets.find(self.root, "tarkor.narrator"), [])
+
+    def test_failed_build_leaves_no_temporary_directory(self):
+        with mock.patch.object(datasets, "_sync_dir", side_effect=RuntimeError("boom")):
+            with self.assertRaisesRegex(RuntimeError, "boom"):
+                self.build()
+        self.assertEqual(os.listdir(os.path.join(self.root, "tarkor.narrator")), [])
+
+    def test_files_and_directory_are_fsynced(self):
+        with mock.patch("os.fsync") as fsync:
+            self.build()
+        self.assertGreaterEqual(fsync.call_count, 5)  # 3 partitions + LICENSE + manifest (+ directories)
+
+    def test_existing_version_is_detected_at_rename_not_before(self):
+        final = os.path.join(self.root, "tarkor.narrator", "0.1.0")
+        real = os.rename
+
+        def racing(src, dst):  # another process publishes the version between our work and our rename
+            os.makedirs(os.path.join(dst, "x"))
+            return real(src, dst)
+        with mock.patch("os.rename", racing):
+            with self.assertRaisesRegex(DatasetError, "already exists"):
+                self.build()
+        self.assertEqual(os.listdir(os.path.join(final)), ["x"])
+        self.assertEqual(os.listdir(os.path.dirname(final)), ["0.1.0"])
+
+    def test_record_includes_inherited_slots(self):
+        class Base_(object):
+            __slots__ = ("id", "a")
+
+        class Child(Base_):
+            __slots__ = ("b",)
+        c = Child()
+        c.id, c.a, c.b = "i", 1, 2
+        self.assertEqual(datasets._record(c), {"id": "i", "a": 1, "b": 2})
 
     def test_rejected_examples_are_listed_without_their_text(self):
         bad = example(999, text="escribeme a alguien@example.com")
