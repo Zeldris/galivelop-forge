@@ -9,10 +9,10 @@
 | Campo | Valor |
 |---|---|
 | **Rama** | `ccr-9d1db1a5-uvw2uh` |
-| **Fase / tarea** | Versión 0.1.0 (F1, datos). 0.1.0-1 hecha: paquete `gforge` (stdlib), cinco puertos que fallan cerrados, servicios `baseline` y `train`, tests de las invariantes 7 y 10. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
-| **Último punto estable** | Este commit (0.1.0-1). `main` = d31f9f8. |
-| **Siguiente paso** | 0.1.0-4: fuente Tarkor, leer los exports de destilación y DPO (sin ejecutar los scripts del juego; leer Tarkor con un subagente). **Espera a Q-4/Q-5** (`docs/questions.md`): la sesión no tiene el repo de Tarkor y el modo automático bloqueó añadirlo. 0.1.0-2 y 0.1.0-3 bloqueadas hasta que gart tenga código: aviso en `docs/records/aviso-gart.md`, que lleva la persona. |
-| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (9 tests). |
+| **Fase / tarea** | Versión 0.1.0 (F1, datos). 0.1.0-1 y 0.1.0-4 hechas: puertos que fallan cerrados y fuente Tarkor (`gforge.sources.tarkor`, lee destilación y DPO; formato en `docs/sources/tarkor.md`, leído de `Zeldris/World-Maker-Fantasy` en `cad662d`). 0.1.0-2/3 bloqueadas por gart. Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
+| **Último punto estable** | Este commit (0.1.0-4). `main` = d31f9f8. |
+| **Siguiente paso** | 0.1.0-5: filtros de datos personales (invariante 2; las parejas DPO `origin=live` pueden llevar texto del jugador) y de maestro (invariante 9; `teacher` = `provider` de Tarkor, contra la lista de maestros abiertos de ADR 0007). |
+| **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (21 tests). |
 
 ## Para la próxima publicación
 
