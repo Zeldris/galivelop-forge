@@ -10,8 +10,8 @@
 |---|---|
 | **Rama** | `claude/siguiente-ftxnzk` (sigue a `ccr-9d1db1a5-uvw2uh`, traída por fast-forward) |
 | **Fase / tarea** | Versión 0.1.0 (F1, datos). Hechas 0.1.0-9 (barrido de leves), 0.1.0-1, 0.1.0-4, 0.1.0-5, 0.1.0-6 y 0.1.0-7 (`gforge.datasets`; `gforge.splits`; `gforge.filters`: correos, teléfonos y nombres de una lista que da quien llama, fuera del repo; `gforge.teachers`: lista de maestros abiertos que falla cerrada). 0.1.0-2/3 bloqueadas por gart. Q-6 contestada (lista de maestros confirmada). Presupuesto de compactaciones: 1 (para la 0.1.0 entera). |
-| **Último punto estable** | 0.1.0 cerrada y en `main` = 74c2004 (subida directa, confirmada por la persona; CI verde, marca de revisión `74c2004`). Rama: `b22407b` (0.1.0-9), CI verde. |
-| **Siguiente paso** | Retro de 0.1.0-9 cerrada (aprobada y aplicada: 0.1.0-10, P2, P3). Falta la fase 3: revisión de lo nuevo (el diff de código de 0.1.0-10 es pequeño: se revisó en la sesión), `bash .claude/gw/scripts/reviewed.sh`, push y, con confirmación expresa de la persona, llevar 0.1.0-9/10 a `main`. 0.2.0 sigue bloqueada (GVE 0.3, gmod); 0.1.0-2/3, por gart; leves en `docs/records/pending.md`. |
+| **Último punto estable** | 0.1.0-9 y 0.1.0-10 en `main` = cf300d3 (subida directa, confirmada por la persona 2026-11-27; CI verde, marca de revisión `23b2cf5`, retro `retro-2026-11-27-0-1-0-9.md` aprobada y aplicada). `v0.1.0-pre.1` publicada sobre 74c2004. |
+| **Siguiente paso** | Nada desbloqueado: 0.2.0 espera GVE 0.3 y gmod; 0.1.0-2/3, gart. Cuando lleguen, empezar desde `main` con `merge-main.py`. Leves en `docs/records/pending.md`; notas W1-W4 para el flujo en la retro de 0.1.0-9. |
 | **Check** | `python3 -m unittest discover -s tests`, `python3 .claude/gw/scripts/tests-after-main.py`, `python3 .claude/gw/scripts/ci-local.py --validate`: verde (86 tests). Tras 0.1.0: barridos tres leves de `gforge` (picklado de `SourceError`/`PortUnavailable`, `__slots__` str en `_record`, fsync tras publicar en `build`); en 0.1.0-9 se cerraron narración vacía, `.JSONL`, comodines de maestros y `_publish` con directorio vacío. |
 
 ## Para la próxima publicación
