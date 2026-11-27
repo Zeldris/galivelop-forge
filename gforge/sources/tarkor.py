@@ -129,15 +129,18 @@ def _messages(value: Any, roles: Sequence[str], key: str, path: str, line: int) 
     return out
 
 
-def _narration(content: str, where: str, path: str, line: int) -> None:
-    """The assistant content must be a NarrationResult: narration (str) and newFacts (list of str)."""
+def _narration(content: str, where: str, path: str, line: int, allow_empty: bool = False) -> None:
+    """The assistant content must be a NarrationResult: narration (str) and newFacts (list of str).
+
+    An empty narration is refused unless `allow_empty`: a DPO `rejected` may be the empty output of the local narrator.
+    """
     try:
         result = json.loads(content)
     except ValueError:
         raise SourceError(path, line, "{} is not a JSON NarrationResult".format(where))
     if not isinstance(result, dict) or not isinstance(result.get("narration"), str):
         raise SourceError(path, line, "{} has no string 'narration'".format(where))
-    if not result["narration"].strip():
+    if not allow_empty and not result["narration"].strip():
         raise SourceError(path, line, "{} has an empty 'narration'".format(where))
     facts = result.get("newFacts")
     if not isinstance(facts, list) or not all(isinstance(f, str) for f in facts):
@@ -189,7 +192,7 @@ def read_dpo(path: str) -> List[PreferenceExample]:
         chosen = _messages(record.get("chosen"), ("assistant",), "chosen", path, line)
         rejected = _messages(record.get("rejected"), ("assistant",), "rejected", path, line)
         _narration(chosen[0]["content"], "chosen[0].content", path, line)
-        _narration(rejected[0]["content"], "rejected[0].content", path, line)
+        _narration(rejected[0]["content"], "rejected[0].content", path, line, allow_empty=True)
         match = _SCENARIO_MARK.search(prompt[1]["content"])
         scenario_id = None
         if match:

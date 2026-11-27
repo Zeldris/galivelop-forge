@@ -59,7 +59,9 @@ file (format: header of scripts/questions.py). Answer by number: `questions.py a
 
 ## Q-7
 - Refs: 0.1.0-9
-- Status: open
+- Status: answered
 - Asked: 2026-11-27
 - Question: En read_dpo, ¿debe rechazarse también una narración vacía en el lado rejected? Hoy una sola pareja así hace fallar la lectura entera de live-dpo.jsonl.
 - Recommendation: Pedir narración no vacía solo en SFT y en chosen; en rejected se acepta vacía (una salida vacía del narrador local es un negativo DPO válido), con un test por lado.
+- Answer: ok
+- Answered: 2026-11-27

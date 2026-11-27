@@ -28,13 +28,13 @@ def sft(id, category, assistant=NARRATION):
     }
 
 
-def dpo(id, user="Gorhorn mira al norte.", chosen=NARRATION):
+def dpo(id, user="Gorhorn mira al norte.", chosen=NARRATION, rejected=NARRATION):
     return {
         "id": id,
         "provider": "gemini:x",
         "prompt": [{"role": "system", "content": "Eres el narrador."}, {"role": "user", "content": user}],
         "chosen": [{"role": "assistant", "content": chosen}],
-        "rejected": [{"role": "assistant", "content": NARRATION}],
+        "rejected": [{"role": "assistant", "content": rejected}],
     }
 
 
@@ -85,6 +85,14 @@ class Distillation(Export):
         for blank in ("", "   \n"):
             self.write("viaje.jsonl", [sft("v1", "viaje", assistant=json.dumps({"narration": blank, "newFacts": []}))])
             self.assertReason(lambda: read_distillation(self.dir), "viaje.jsonl:1", "empty 'narration'")
+
+    def test_dpo_empty_narration_is_refused_in_chosen_and_accepted_in_rejected(self):
+        blank = json.dumps({"narration": "", "newFacts": []})
+        path = os.path.join(self.dir, "live-dpo.jsonl")
+        self.write("live-dpo.jsonl", [dpo("d1", chosen=blank)])
+        self.assertReason(lambda: read_dpo(path), "live-dpo.jsonl:1", "chosen[0].content has an empty 'narration'")
+        self.write("live-dpo.jsonl", [dpo("d1", rejected=blank)])
+        self.assertEqual([e.id for e in read_dpo(path)], ["d1"])
 
     def test_extension_is_case_insensitive(self):
         self.write("Cat.JSONL", [sft("a", "Cat")])
