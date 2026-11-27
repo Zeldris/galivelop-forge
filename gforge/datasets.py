@@ -73,7 +73,10 @@ def licence_of(manifest: Dict[str, Any]) -> str:
     licence = manifest.get("licence") if isinstance(manifest, dict) else None
     spdx = licence.get("spdx") if isinstance(licence, dict) else None
     conditions(spdx)
-    if sorted(licence.get("conditions", ())) != sorted(conditions(spdx)):
+    listed = licence.get("conditions", ())
+    if not isinstance(listed, (list, tuple)) or not all(isinstance(c, str) for c in listed):
+        raise LicenceError("manifest conditions must be a list of strings, got {!r}".format(listed))
+    if sorted(listed) != sorted(conditions(spdx)):
         raise LicenceError("manifest conditions {} do not match {}".format(licence.get("conditions"), spdx))
     return spdx
 
@@ -143,7 +146,7 @@ def build(
         "examples": {id_: _sha(lines[id_]) for id_ in sorted(lines)},
         "rejected": [{"id": r.id, "rule": r.rule} for r in rejections],
     }
-    manifest["dataset_hash"] = _sha("\n".join("{} {}".format(i, h) for i, h in manifest["examples"].items()))
+    manifest["dataset_hash"] = _hash_of(manifest["examples"])
     os.makedirs(os.path.join(root, target), exist_ok=True)
     work = tempfile.mkdtemp(prefix=".build-", dir=os.path.join(root, target))
     try:
@@ -189,23 +192,70 @@ def read_manifest(path: str) -> Dict[str, Any]:
     return manifest
 
 
+def _hash_of(examples: Dict[str, str]) -> str:
+    return _sha("\n".join("{} {}".format(i, h) for i, h in examples.items()))
+
+
+def _row_id(file: str, number: int, row: str) -> str:
+    """The id of one jsonl row, parsed once; any malformed row is a DatasetError with file and line."""
+    try:
+        record = json.loads(row)
+        if not isinstance(record, dict):
+            raise TypeError("row is {} not an object".format(type(record).__name__))
+        id_ = record["id"]
+        if not isinstance(id_, str):
+            raise TypeError("id {!r} is not a string".format(id_))
+        return id_
+    except (ValueError, KeyError, TypeError) as error:
+        raise DatasetError("{}:{}: malformed row: {!r}".format(file, number, error))
+
+
 def verify(path: str) -> Dict[str, Any]:
-    """Read the manifest and check every partition file against the hashes and ids it lists."""
+    """Read the manifest and check partitions, licence notice and hashes against what it lists."""
     manifest = read_manifest(path)
+    names = (splits.TRAIN, splits.VAL, splits.TEST)
+    partitions = manifest.get("partitions")
+    if not isinstance(partitions, dict) or sorted(partitions) != sorted(names):
+        raise DatasetError("{}: manifest partitions must be exactly {}".format(path, ", ".join(names)))
+    for name in names:
+        ids = partitions[name]
+        if not isinstance(ids, list) or not all(isinstance(i, str) for i in ids):
+            raise DatasetError("{}: partition {} must be a list of ids".format(path, name))
+    seed = str(manifest.get("seed"))
+    fractions = manifest.get("fractions") or {}
+    try:
+        splits.verify(splits.Split(seed, fractions.get("val"), fractions.get("test"),
+                                   *(tuple(partitions[n]) for n in names)))
+    except splits.SplitError as error:
+        raise DatasetError("{}: partitions are not disjoint: {}".format(path, error))
+    try:
+        with open(os.path.join(path, LICENSE_FILE), encoding="utf-8") as handle:
+            notice = handle.read()
+    except OSError as error:
+        raise DatasetError("{}: missing licence notice: {}".format(path, error))
+    try:
+        expected = _notice(manifest)
+    except (KeyError, TypeError, AttributeError) as error:
+        raise DatasetError("{}: manifest lacks provenance for the notice: {!r}".format(path, error))
+    if notice != expected:
+        raise DatasetError("{}: {} differs from the manifest's licence".format(path, LICENSE_FILE))
     seen = {}  # type: Dict[str, str]
-    for name, ids in manifest["partitions"].items():
+    for name in names:
         file = os.path.join(path, name + ".jsonl")
         try:
             with open(file, encoding="utf-8") as handle:
                 rows = [line.rstrip("\n") for line in handle]
         except OSError as error:
             raise DatasetError("{}: {}".format(file, error))
-        if [json.loads(r)["id"] for r in rows] != list(ids):
+        ids = [_row_id(file, n, r) for n, r in enumerate(rows, 1)]
+        if ids != partitions[name]:
             raise DatasetError("{}: ids differ from the manifest's partition {}".format(file, name))
-        for row in rows:
-            seen[json.loads(row)["id"]] = _sha(row)
+        for id_, row in zip(ids, rows):
+            seen[id_] = _sha(row)
     if seen != manifest["examples"]:
         raise DatasetError("{}: example hashes differ from the manifest".format(path))
+    if manifest.get("dataset_hash") != _hash_of(manifest["examples"]):
+        raise DatasetError("{}: dataset_hash differs from the example hashes".format(path))
     return manifest
 
 

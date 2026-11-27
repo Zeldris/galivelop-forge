@@ -2,7 +2,7 @@
 import random
 import unittest
 
-from gforge.splits import TEST, TRAIN, VAL, Split, SplitError, partition_of, split, verify
+from gforge.splits import TEST, TRAIN, VAL, Split, SplitError, bucket, partition_of, split, verify
 
 IDS = ["ex-{}".format(i) for i in range(2000)]
 
@@ -60,6 +60,11 @@ class SplitTests(unittest.TestCase):
         leaked = Split("s", 0.1, 0.1, ("a", "b"), (), ("b",))
         with self.assertRaisesRegex(SplitError, "both train and test"):
             verify(leaked)
+
+    def test_bucket_validates_seed(self):
+        with self.assertRaisesRegex(SplitError, "seed must be a non-empty string"):
+            bucket("", "ex-1")
+        self.assertEqual(bucket(7, "ex-1"), bucket("7", "ex-1"))
 
 
 if __name__ == "__main__":

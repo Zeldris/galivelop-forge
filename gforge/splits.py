@@ -51,6 +51,7 @@ class Split:
 
 def bucket(seed: str, example_id: str) -> float:
     """A stable number in [0, 1) for this seed and id (length-prefixed so no pair of values can collide)."""
+    seed = _seed(seed)
     data = "{}:{}:{}".format(len(seed), seed, example_id).encode("utf-8")
     return int.from_bytes(hashlib.sha256(data).digest()[:8], "big") / _SCALE
 

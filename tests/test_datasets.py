@@ -129,6 +129,64 @@ class BuildTests(Base):
         with self.assertRaises(LicenceError):
             datasets.read_manifest(path)
 
+    def _edit_manifest(self, path, change):
+        manifest_file = os.path.join(path, "manifest.json")
+        with open(manifest_file, encoding="utf-8") as handle:
+            manifest = json.load(handle)
+        change(manifest)
+        with open(manifest_file, "w", encoding="utf-8") as handle:
+            json.dump(manifest, handle)
+
+    def test_verify_rejects_partition_keys_other_than_train_val_test(self):
+        path = self.build()
+        self._edit_manifest(path, lambda m: m["partitions"].update({"../../x": []}))
+        with self.assertRaisesRegex(DatasetError, "partitions must be exactly train, val, test"):
+            datasets.verify(path)
+
+    def test_verify_rejects_test_example_leaked_into_train(self):
+        path = self.build()
+        with open(os.path.join(path, "test.jsonl"), encoding="utf-8") as handle:
+            leaked = handle.readline()
+        leaked_id = json.loads(leaked)["id"]
+        with open(os.path.join(path, "train.jsonl"), "a", encoding="utf-8") as handle:
+            handle.write(leaked)
+        self._edit_manifest(path, lambda m: m["partitions"]["train"].append(leaked_id))
+        with self.assertRaisesRegex(DatasetError, "not disjoint"):
+            datasets.verify(path)
+
+    def test_verify_requires_matching_licence_notice(self):
+        path = self.build()
+        os.remove(os.path.join(path, "LICENSE"))
+        with self.assertRaisesRegex(DatasetError, "missing licence notice"):
+            datasets.verify(path)
+        path = self.build(version="0.2.0")
+        with open(os.path.join(path, "LICENSE"), "w", encoding="utf-8") as handle:
+            handle.write("CC0\n")
+        with self.assertRaisesRegex(DatasetError, "LICENSE differs"):
+            datasets.verify(path)
+
+    def test_verify_recomputes_dataset_hash(self):
+        path = self.build()
+        self._edit_manifest(path, lambda m: m.update({"dataset_hash": "0" * 64}))
+        with self.assertRaisesRegex(DatasetError, "dataset_hash differs"):
+            datasets.verify(path)
+
+    def test_verify_reports_malformed_row_with_file_and_line(self):
+        for bad in ("not json", "[1]", '{"no":"id"}'):
+            path = self.build(version="v-{}".format(len(bad)))
+            with open(os.path.join(path, "val.jsonl"), "a", encoding="utf-8") as handle:
+                handle.write(bad + "\n")
+            with self.assertRaisesRegex(DatasetError, r"val\.jsonl:\d+: malformed row"):
+                datasets.verify(path)
+
+    def test_licence_conditions_must_be_list_of_strings(self):
+        manifest = {"licence": {"spdx": "CC-BY-4.0", "conditions": [1, "BY"]}}
+        with self.assertRaisesRegex(LicenceError, "list of strings"):
+            datasets.licence_of(manifest)
+        manifest["licence"]["conditions"] = "BY"
+        with self.assertRaisesRegex(LicenceError, "list of strings"):
+            datasets.licence_of(manifest)
+
 
 if __name__ == "__main__":
     unittest.main()
