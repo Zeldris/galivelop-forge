@@ -14,4 +14,4 @@ dependencies = []
 unsloth = ["unsloth"]
 
 [tool.setuptools]
-packages = ["gforge"]
+packages = ["gforge", "gforge.sources"]

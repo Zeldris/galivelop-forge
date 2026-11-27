@@ -29,7 +29,7 @@ sus tareas están hechas y se cumple su «Pasa si».
 - 0.1.0-2 Vendorizar gart con su test de huella sha256; alta del espacio `gforge` en gart. `bloqueada`: gart aún sin código; aviso en [`records/aviso-gart.md`](records/aviso-gart.md).
 - 0.1.0-3 Esquema `gforge.dataset/0` y su validación. `bloqueada` (espera a 0.1.0-2).
 - 0.1.0-4 Fuente Tarkor: leer los exports de destilación y DPO (sin ejecutar los scripts del juego). `hecho`: `gforge.sources.tarkor`, formato en [`sources/tarkor.md`](sources/tarkor.md); falta probarlo con un export real (lo genera la persona).
-- 0.1.0-5 Filtros de datos personales (invariante 2) y de maestro (invariante 9, lista de maestros abiertos).
+- 0.1.0-5 Filtros de datos personales (invariante 2) y de maestro (invariante 9, lista de maestros abiertos). `hecho`: `gforge.filters` y `gforge.teachers`; la lista de maestros, a falta de que la persona la confirme (Q-6).
 - 0.1.0-6 Particiones deterministas por semilla y hash (invariante 3); `test` como lote de reserva del GVE.
 - 0.1.0-7 La licencia viaja (invariante 1) y `datasets/<objetivo>/<versión>/` en el repo.
 
