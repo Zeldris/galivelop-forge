@@ -4,6 +4,9 @@ A teacher id is `<host>:<model>` as Tarkor writes it (`groq:llama-3.3-70b-versat
 model, so the decision is made on the model (the part after the first `:`, lower case, last `/` segment). The
 list fails closed: a model that matches no pattern is rejected, the same as a closed one, so a new teacher enters
 only when someone adds it here with its licence.
+
+Names come as `x-y` or, from Ollama, as `x:tag` (`deepseek-r1:70b`): the tag keeps its suffix after `model_of`, so an
+exclusion has to cover both forms or an open pattern (`deepseek-r1*`) lets the second through.
 """
 from fnmatch import fnmatchcase
 from typing import Optional, Sequence, Tuple

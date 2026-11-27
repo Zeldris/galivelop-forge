@@ -121,3 +121,5 @@ creada.
 - Ningún ejemplo sin maestro o con un maestro cerrado (ADR 0007).
 - Ninguna subida a Hugging Face fuera de `publish` ni sin la invariante 4 (ADR 0004).
 - Los puertos fallan cerrados: nunca se finge una medida ni un cerrojo de grun (ADR 0013).
+- Un chequeo nuevo en un validador que sirve a varios llamadores (por ejemplo `_narration`, de SFT y de DPO) nombra a
+  todos los llamadores y qué lado cambia; un lado que no debía endurecerse es un hallazgo. (criterio)
