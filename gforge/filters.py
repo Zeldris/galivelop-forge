@@ -23,9 +23,15 @@ _EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 _GROUP = r"(?:\(\s*)?\d+(?:\s*\))?"
 _SEP = r"[\s.\-\u2013\u2014/]+"
 _PHONE = re.compile(r"(?<![\w+])\+?" + _GROUP + r"(?:" + _SEP + _GROUP + r")*(?!\w)")
+# An ISO date, optionally with a day range ("2026-07-21/22"), standing on its own: it is dropped before looking for
+# phones, since its 10 digits would add up. One glued to other digit groups ("91 2026-07-21") is kept, so a phone
+# that happens to contain a date shape is still caught.
+_ISO_DATE = re.compile(r"(?<![\w+.\-\u2013\u2014/])(?<!\d\s)(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])"
+                       r"(?:/(?:0[1-9]|[12]\d|3[01]))?(?!\w|" + _SEP + r"\(?\d)")
 
 
 def _has_phone(text: str) -> bool:
+    text = _ISO_DATE.sub(" ", text)
     return any(9 <= sum(c.isdigit() for c in m.group()) <= 15 for m in _PHONE.finditer(text))
 
 

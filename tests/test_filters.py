@@ -114,6 +114,16 @@ class PersonalData(unittest.TestCase):
             self.assertEqual(personal_data(text)[0], RULE_PHONE, text)
         self.assertIsNone(personal_data("Daño 12-15, vida 80/100, oro 200 y 1247."))
 
+    def test_iso_date_with_day_range_is_not_a_phone(self):
+        # Real Tarkor export: "checklist 2026-07-21/22" was rejected as a phone (10 digits).
+        for text in ("núcleo (checklist 2026-07-21/22, ampliación)", "el 2026-07-21/22.", "2026-07-21"):
+            self.assertIsNone(personal_data(text), text)
+
+    def test_phone_next_to_or_shaped_like_a_date_is_still_rejected(self):
+        for text in ("612-345-678", "el 2026-07-21 llama al 612 345 678", "91 2026-07-21", "2026-07-21 612",
+                     "+34 2026-07-21"):
+            self.assertEqual(personal_data(text)[0], RULE_PHONE, text)
+
 
 class Teacher(unittest.TestCase):
     def test_closed_teacher_is_rejected_with_the_reason(self):

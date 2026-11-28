@@ -47,5 +47,9 @@ exportado y nunca ejecuta los scripts.
 
 ## Pendiente
 
-- Validar el lector contra un export real, que el repo de Tarkor no tiene subido (`backend/output/` está en
-  `.gitignore`). Lo genera la persona en su equipo; es el «Pasa si» de la 0.1.0.
+- **Destilación validada contra un export real** (2026-11-28, en la Deck de la persona, sin copiarlo): 374 ejemplos de
+  11 categorías, sin errores de lectura. Pasan los filtros 179: 165 de `mistral:mistral-large-latest` (no está en la
+  lista) y 30 de `gemini:gemini-flash-latest` (cerrado) se rechazan; 5 falsos teléfonos se arreglaron en 0.1.0-12.
+  Para regenerar conviene usar solo maestros de la lista (Groq, SambaNova, Cloudflare).
+- Falta validar el DPO contra un export real (`live-dpo.jsonl`): lo genera la persona en su equipo con
+  `generar-dataset-dpo.sh` y `npm run export-dpo-dataset` (Ollama en marcha). Es el «Pasa si» de la 0.1.0.
